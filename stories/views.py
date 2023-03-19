@@ -28,7 +28,7 @@ def create_story(request):
                 tag = Tag.objects.get_or_create(name=tag_name)
                 story.tags.add(tag)
 
-            return redirect('stories:index')
+            return redirect('stories:home')
     else:
         form = StoryForm()
         category_form = CategoryForm()
@@ -39,13 +39,27 @@ def create_story(request):
     return render(request, 'stories/create_story.html', context)
 
 
+# Obselete
 def index(request):
     stories = Story.objects.all()
     return render(request, 'stories/index.html', {'stories': stories})
 
 
 def home(request):
-    stories = Story.objects.all().order_by('-created')[:30]
+    order_by = request.GET.get('order_by', 'votes')
+    category_filter = request.GET.get('category', None)
+
+    if order_by == 'votes':
+        order_by = '-upvotes'
+    elif order_by == 'new':
+        order_by = '-created'
+    else:
+        order_by = '-upvotes'
+    stories = Story.objects.all().order_by(order_by)
+
+    if category_filter:
+        stories = stories.filter(category__name__iexact=category_filter)
+
     context = {
         'stories': stories,
     }

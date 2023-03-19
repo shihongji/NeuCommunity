@@ -11,7 +11,18 @@
 
 <body>
   <header>
-    {% block header %}{% endblock %}
+    <nav>
+      <a href="{% url 'stories:home' %}">A2L</a>
+      <a href="{% url 'stories:home' %}?category=ask">Ask</a>
+      <a href="{% url 'stories:home' %}?category=jobs">Jobs</a>
+      <a href="{% url 'stories:home' %}?order_by=new">New</a>
+      <a href="{% url 'stories:submit' %}">Submit</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'users:profile' user.id %}">{{ user.username }}</a>
+        <a href="{% url 'users:logout' %}">Logout</a>
+      {% else %}
+        <a href="{% url 'users:login' %}">Login</a>
+      {% endif %}
   </header>
 
   <main>
