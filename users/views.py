@@ -55,11 +55,12 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            # UserProfile will be created automatically by the post_save signal, so I comment below.
             # Create the UserProfile
-            profile = UserProfile(user=user)
-            profile.save()
+            # profile = UserProfile(user=user)
+            # profile.save()
             login(request, user)
-            return redirect('index')
+            return redirect('stories:home')
     else:
         form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
