@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Stories</h2>
+<ul>
+  {% for story in stories %}
+  <li>{{ story.title }}</li>
+  {% empty %}
+  <li>No stories yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

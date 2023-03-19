@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2> {{ user.username }}'s Profile</h2>
+<p>Email: {{ user.email }}</p>
+
+<h3>Submissions</h3>
+<ul>
+  {% for story in user_stories %}
+  <li>
+    <a href="{{ story.url }}">{{ story.title }}</a> {{ story.created_at|date:"Y-m-d"}}
+  </li>
+  {% empty %}
+  <li>No submissions yet.</li>
+  {% endfor %}
+</ul>
+
+<h3>Comments</h3>
+<ul>
+  {% for comment in user_comments %}
+  <li>
+    {{ comment.text }} ({{ comment.created_at|date:"Y-m-d" }})
+    <br>
+    On story: <a href="{{ comment.story.url }}">{{ comment.story.title }}</a>
+  </li>
+  {% empty %}
+  <li>No comments yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
