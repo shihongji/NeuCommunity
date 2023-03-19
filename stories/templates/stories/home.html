@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>Welcome to My Hacker News Clone</h1>
+{% endblock %}
+
+{% block content %}
+<h2>Latest Stories</h2>
+<ul>
+  {% for story in stories %}
+  <li>
+    <a href="{{ story.url }}">{{ story.title }}</a> by {{ story.user.username }}
+    <br>
+    <small>{{ story.created|timesince }} ago | {{ story.category.name }} | {{ story.tags.all|join:", " }}</small>
+    <a href="{% url 'stories:story_detail' story.id %}">Comments ({{ story.num_comments }})</a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}
+
+{% block footer %}
+<p>Footer information, such as links to About, Contact, and Help pages, etc.</p>
+{% endblock %}

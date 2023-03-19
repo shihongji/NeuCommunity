@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Story
-from .forms import StoryForm, CategoryForm, TagForm
+from .models import Story, Comment
+from .forms import StoryForm, CategoryForm, TagForm, CommentForm
 
 # Create your views here.
 
@@ -42,3 +42,37 @@ def create_story(request):
 def index(request):
     stories = Story.objects.all()
     return render(request, 'stories/index.html', {'stories': stories})
+
+
+def home(request):
+    stories = Story.objects.all().order_by('-created')[:30]
+    context = {
+        'stories': stories,
+    }
+    return render(request, 'stories/home.html', context)
+
+
+def story_detail(request, story_id):
+    story = get_object_or_404(Story, pk=story_id)
+    return render(request, 'stories/story_detail.html', {'story': story})
+
+
+@login_required
+def add_comment(request, story_id):
+    story = get_object_or_404(Story, id=story_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.story = story
+            comment.user = request.user
+            comment.save()
+            return redirect('stories:story_detail', story_id=story.id)
+    else:
+        form = CommentForm()
+
+    context = {
+        'story': story,
+        'form': form
+    }
+    return render(request, 'stories/story_detail.html', context)

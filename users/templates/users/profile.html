@@ -2,6 +2,9 @@
 
 {% block content %}
 <h2> {{ user.username }}'s Profile</h2>
+<p>Blog: {{ user_profile.blog_site }}</p>
+<p>GitHub: {{ user_profile.github_address }}</p>
+<p>LinkedIn: {{ user_profile.linkedin_address }}</p>
 <p>Email: {{ user.email }}</p>
 
 <h3>Submissions</h3>

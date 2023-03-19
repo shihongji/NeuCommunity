@@ -23,7 +23,9 @@ class Story(models.Model):
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, blank=True, null=True)
     tags = models.ManyToManyField('Tag', blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def num_comments(self):
+        return self.comments.count()
 
     def __str__(self):
         return self.title
@@ -38,9 +40,10 @@ class Tag(models.Model):
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    story = models.ForeignKey(Story, on_delete=models.CASCADE)
+    story = models.ForeignKey(
+        Story, related_name='comments', on_delete=models.CASCADE)
     text = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username}: {self.text}"
+        return f"{self.user.username}: {self.text[:20]}"

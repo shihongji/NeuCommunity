@@ -1,5 +1,5 @@
 from django import forms
-from .models import Story, Category, Tag
+from .models import Story, Category, Tag, Comment
 
 
 class StoryForm(forms.ModelForm):
@@ -23,3 +23,9 @@ class TagForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = ['name']
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']

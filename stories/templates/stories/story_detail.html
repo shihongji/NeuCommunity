@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ story.title }}</h1>
+<p>By {{ story.user.username }} | {{ story.created|timesince }} ago | {{ story.category.name }}</p>
+<p>Tags: {{ story.tags.all|join:", " }}</p>
+{% if story.url %}
+<p><a href="{{ story.url }}">External Link</a></p>
+{% else %}
+<p>{{ story.text }}</p>
+{% endif %}
+
+<hr>
+
+<h2 id="comments">Comments ({{ story.num_comments }})</h2>
+{% for comment in story.comments.all %}
+<div class="comment">
+  <p>{{ comment.user.username }} | {{ comment.created|timesince }} ago</p>
+  <p>{{ comment.text }}</p>
+</div>
+<hr>
+{% endfor %}
+
+<h3>Add a comment</h3>
+<form method="POST" action="{% url 'stories:add_comment' story.id %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Submit Comment</button>
+</form>
+{% endblock %}

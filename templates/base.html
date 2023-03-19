@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Hacker News Clone{% endblock %}</title>
   <!-- Add CSS and JavaScript links here if needed -->
@@ -10,7 +11,7 @@
 
 <body>
   <header>
-    <!-- Add your header content here -->
+    {% block header %}{% endblock %}
   </header>
 
   <main>
@@ -19,7 +20,7 @@
   </main>
 
   <footer>
-    <!-- Add your footer content here -->
+    {% block footer %}{% endblock %}
   </footer>
 </body>
 
