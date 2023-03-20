@@ -7,16 +7,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Hacker News Clone{% endblock %}</title>
   <!-- Add CSS and JavaScript links here if needed -->
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
 </head>
 
 <body>
-  <header>
-    <nav>
-      <a href="{% url 'stories:home' %}">A2L</a>
-      <a href="{% url 'stories:home' %}?category=ask">Ask</a>
-      <a href="{% url 'stories:home' %}?category=jobs">Jobs</a>
-      <a href="{% url 'stories:home' %}?order_by=new">New</a>
-      <a href="{% url 'stories:submit' %}">Submit</a>
+  <div class="container">
+  <header >
+    <nav class="nav bg-info">
+      <li class="nav-item">
+      <a class="nav-link link-light" href="{% url 'stories:home' %}">A2L</a>
+      </li>
+      <li class="nav-item">
+      <a class="nav-link link-light" href="{% url 'stories:home' %}?category=ask">Ask</a>
+      </li>
+      <a class="nav-link link-light" href="{% url 'stories:home' %}?category=jobs">Jobs</a>
+      <a class="nav-link link-light" href="{% url 'stories:home' %}?order_by=new">New</a>
+      <a class="nav-link link-light" href="{% url 'stories:submit' %}">Submit</a>
       {% if user.is_authenticated %}
         <a href="{% url 'users:profile' user.id %}">{{ user.username }}</a>
         <a href="{% url 'users:logout' %}">Logout</a>
@@ -33,6 +41,7 @@
   <footer>
     {% block footer %}{% endblock %}
   </footer>
+  </div>
 </body>
 
 </html>
