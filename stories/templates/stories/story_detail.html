@@ -12,19 +12,14 @@
 
 <hr>
 
-<h2 id="comments">Comments ({{ story.num_comments }})</h2>
-{% for comment in story.comments.all %}
-<div class="comment">
-  <p>{{ comment.user.username }} | {{ comment.created|timesince }} ago</p>
-  <p>{{ comment.text }}</p>
-</div>
-<hr>
-{% endfor %}
+<h3 id="comments">Comments ({{ story.num_comments }})</h3>
+{% include 'stories/comment_tree.html' with comments=root_comments %}
 
-<h3>Add a comment</h3>
+<h3 id="reply">Add a comment</h3>
 <form method="POST" action="{% url 'stories:add_comment' story.id %}">
   {% csrf_token %}
   {{ form.as_p }}
-  <button type="submit">Submit Comment</button>
+  <input type="hidden" id="parent_comment" name="parent_comment" value="">
+  <button type="submit">Submit</button>
 </form>
 {% endblock %}

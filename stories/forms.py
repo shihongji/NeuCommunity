@@ -26,6 +26,10 @@ class TagForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
+    parent_comment = forms.ModelChoiceField(
+        queryset=Comment.objects.all(), required=False, widget=forms.HiddenInput
+    )
+
     class Meta:
         model = Comment
-        fields = ['text']
+        fields = ['text', 'parent_comment']

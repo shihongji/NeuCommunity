@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.deletion import CASCADE
 
 # Create your models here.
 
@@ -42,8 +43,11 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     story = models.ForeignKey(
         Story, related_name='comments', on_delete=models.CASCADE)
+    parent_comment = models.ForeignKey(
+        'self', on_delete=CASCADE, null=True, blank=True, related_name='replies')
     text = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
+    upvotes = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"{self.user.username}: {self.text[:20]}"

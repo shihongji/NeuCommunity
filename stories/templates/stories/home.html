@@ -12,8 +12,8 @@
   <li>
     <a href="{{ story.url }}">{{ story.title }}</a> by {{ story.user.username }}
     <br>
-    <small>{{ story.upvotes }} points | {{ story.created|timesince }} ago | {{ story.tags.all|first_two_tags }}</small>
-    <a href="{% url 'stories:story_detail' story.id %}">Comments ({{ story.num_comments }})</a>
+    <small>{{ story.upvotes }} points | {{ story.created|timesince }} ago | {{ story.tags.all|first_two_tags }}
+    <a href="{% url 'stories:story_detail' story.id %}">Comments ({{ story.num_comments }})</a></small>
   </li>
   {% endfor %}
 </ul>

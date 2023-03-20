@@ -9,4 +9,6 @@ urlpatterns = [
     path('story/<int:story_id>/', views.story_detail, name='story_detail'),
     path('story/<int:story_id>/add_comment/',
          views.add_comment, name='add_comment'),
+    path('comment/<int:comment_id>/upvote/',
+         views.upvote_comment, name='upvote_comment'),
 ]
