@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<h1>Welcome to My Hacker News Clone</h1>
+<h1>Welcome to A2L</h1>
 {% endblock %}
 
 {% block content %}
@@ -16,6 +16,23 @@
   </li>
   {% endfor %}
 </ul>
+<div class="pagination">
+  <span class="step-links">
+    {% if stories.has_previous %}
+        <a href="?page=1{% if order_by %}&order_by={{ order_by }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">&laquo; first</a>
+        <a href="?page={{ stories.previous_page_number }}{% if order_by %}&order_by={{ order_by }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">previous</a>
+    {% endif %}
+
+    <span class="current">
+        Page {{ stories.number }} of {{ stories.paginator.num_pages }}.
+    </span>
+
+    {% if stories.has_next %}
+        <a href="?page={{ stories.next_page_number }}{% if order_by %}&order_by={{ order_by }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">next</a>
+        <a href="?page={{ stories.paginator.num_pages }}{% if order_by %}&order_by={{ order_by }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">last &raquo;</a>
+    {% endif %}
+  </span>
+</div>
 {% endblock %}
 
 {% block footer %}

@@ -1,5 +1,7 @@
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from .models import Story, Comment
 from .forms import StoryForm, CategoryForm, TagForm, CommentForm
 
@@ -55,10 +57,18 @@ def home(request):
         order_by = '-created'
     else:
         order_by = '-upvotes'
-    stories = Story.objects.all().order_by(order_by)
 
     if category_filter:
-        stories = stories.filter(category__name__iexact=category_filter)
+        stories_list = Story.objects.filter(
+            category__name__iexact=category_filter).order_by(order_by)
+    else:
+        stories_list = Story.objects.all().order_by(order_by)
+
+    # Show 20 stories per page
+    paginator = Paginator(stories_list, 20)
+
+    page = request.GET.get('page')
+    stories = paginator.get_page(page)
 
     context = {
         'stories': stories,
