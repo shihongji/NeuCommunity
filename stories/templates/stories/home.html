@@ -32,6 +32,17 @@
         <a href="?page={{ stories.paginator.num_pages }}{% if order_by %}&order_by={{ order_by }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">last &raquo;</a>
     {% endif %}
   </span>
+<form action="" method="get" class="page-jump-form">
+    <label for="page">Jump to page:</label>
+    <input type="number" name="page" id="page" min="1" max="{{ stories.paginator.num_pages }}" value="{{ stories.number }}">
+    {% if order_by %}
+    <input type="hidden" name="order_by" value="{{ order_by }}">
+    {% endif %}
+    {% if category_filter %}
+    <input type="hidden" name="category" value="{{ category_filter }}">
+    {% endif %}
+    <button type="submit">Go</button>
+  </form>
 </div>
 {% endblock %}
 
