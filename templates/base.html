@@ -14,25 +14,7 @@
 
 <body>
   <div class="container">
-  <header >
-    <nav class="nav bg-info">
-      <li class="nav-item">
-      <a class="nav-link link-light" href="{% url 'stories:home' %}">A2L</a>
-      </li>
-      <li class="nav-item">
-      <a class="nav-link link-light" href="{% url 'stories:home' %}?category=ask">Ask</a>
-      </li>
-      <a class="nav-link link-light" href="{% url 'stories:home' %}?category=jobs">Jobs</a>
-      <a class="nav-link link-light" href="{% url 'stories:home' %}?order_by=new">New</a>
-      <a class="nav-link link-light" href="{% url 'stories:submit' %}">Submit</a>
-      {% if user.is_authenticated %}
-        <a href="{% url 'users:profile' user.id %}">{{ user.username }}</a>
-        <a href="{% url 'users:logout' %}">Logout</a>
-      {% else %}
-        <a href="{% url 'users:login' %}">Login</a>
-      {% endif %}
-  </header>
-
+  {% include 'header.html' %}
   <main>
     {% block content %}
     {% endblock %}

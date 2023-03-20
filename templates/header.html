@@ -1,0 +1,34 @@
+<header>
+  <nav class="nav bg-info h6">
+    <li class="nav-item">
+      <a class="nav-link link-light" href="{% url 'stories:home' %}">A2L</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link link-light" href="{% url 'stories:home' %}?category=ask">Ask</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link link-light" href="{% url 'stories:home' %}?category=jobs">Jobs</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link link-light" href="{% url 'stories:home' %}?order_by=new">New</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link link-light" href="{% url 'stories:submit' %}">Submit</a>
+    </li>
+    <!-- User name and Login/Logout -->
+    <ul class="nav ms-auto">
+      {% if user.is_authenticated %}
+      <li class="nav-item">
+        <a class="nav-link link-light" href="{% url 'users:profile' user.id %}">{{ user.username }}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link link-light" href="{% url 'users:logout' %}">Logout</a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link link-light" href="{% url 'users:login' %}">Login</a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+</header>
