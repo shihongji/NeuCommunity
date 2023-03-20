@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load story_tags %} 
 
 {% block header %}
 <h1>Welcome to A2L</h1>
@@ -11,7 +12,7 @@
   <li>
     <a href="{{ story.url }}">{{ story.title }}</a> by {{ story.user.username }}
     <br>
-    <small>{{ story.created|timesince }} ago | {{ story.category.name }} | {{ story.tags.all|join:", " }}</small>
+    <small>{{ story.upvotes }} points | {{ story.created|timesince }} ago | {{ story.tags.all|first_two_tags }}</small>
     <a href="{% url 'stories:story_detail' story.id %}">Comments ({{ story.num_comments }})</a>
   </li>
   {% endfor %}
