@@ -2,8 +2,9 @@ from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from .models import Story, Comment
-from .forms import StoryForm, CategoryForm, TagForm, CommentForm
+from django.http import JsonResponse
+from .models import Story, Comment, Tag
+from .forms import StoryForm, CommentForm
 
 # Create your views here.
 
@@ -12,32 +13,17 @@ from .forms import StoryForm, CategoryForm, TagForm, CommentForm
 def create_story(request):
     if request.method == 'POST':
         form = StoryForm(request.POST)
-        category_form = CategoryForm(request.POST)
-        tag_form = TagForm(request.POST)
 
         if form.is_valid():
             story = form.save(commit=False)
             story.user = request.user
-
-            if category_form.is_valid():
-                category_name = category_form.cleaned_data['name']
-                category = Category.objects.get_or_create(name=category_name)
-                story.category = category
             story.save()
-
-            if tag_form.is_valid():
-                tag_name = tag_form.cleaned_data['name']
-                tag = Tag.objects.get_or_create(name=tag_name)
-                story.tags.add(tag)
-
+            story.tags.set(form.cleaned_data['tags'])
             return redirect('stories:home')
     else:
         form = StoryForm()
-        category_form = CategoryForm()
-        tag_form = TagForm()
 
-    context = {'form': form, 'category_form': category_form,
-               'tag_form': tag_form}
+    context = {'form': form}
     return render(request, 'stories/create_story.html', context)
 
 
@@ -133,3 +119,15 @@ def upvote_comment(request, comment_id):
     comment.upvotes += 1
     comment.save()
     return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+# Autocomlete searth for tags, Add an endpoint to fetch tags.
+
+
+@login_required
+def search_tags(request):
+    query = request.GET.get('query', '').strip()
+    if query:
+        tags = Tag.objects.filter(name__icontains=query).values('name')
+        return JsonResponse(list(tags), safe=False)
+    else:
+        return JsonResponse([], safe=False)

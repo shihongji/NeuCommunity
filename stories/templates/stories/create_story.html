@@ -7,19 +7,43 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         new SimpleMDE({element: document.getElementById("id_text")});
+        const tagsInput = document.getElementById("id_tags");
+
+        tagsInput.addEventListener("input", function (event) {
+            const query = event.target.value.split(",").pop().trim();
+            if (query.length >= 1) {
+                fetch("/search_tags/?query=" + query)
+                    .then((response) => response.json())
+                    .then((tags) => {
+                        let suggestions = "";
+                        tags.forEach((tag) => {
+                            suggestions += `<button type="button" class="list-group-item list-group-item-action">${tag.name}</button>`;
+                        });
+                        document.getElementById("tag-suggestions").innerHTML = suggestions;
+
+                        const suggestionItems = document.querySelectorAll("#tag-suggestions button");
+                        suggestionItems.forEach((item) => {
+                            item.addEventListener("click", function () {
+                                const existingTags = tagsInput.value.split(",").slice(0, -1).map(tag => tag.trim());
+                                existingTags.push(item.textContent);
+                                tagsInput.value = existingTags.join(", ");
+                                document.getElementById("tag-suggestions").innerHTML = "";
+                            });
+                        });
+                    });
+            } else {
+                document.getElementById("tag-suggestions").innerHTML = "";
+            }
+        });
     });
 </script>
 {% endblock %}
 {% block content %}
-<h2>Submint a Story</h2>
+<h2>Create New</h2>
 <form method="post">
   {% csrf_token %}
   {% bootstrap_form form %}
-  <h3>Create a new category (optional)</h3>
-  {{ category_form.as_p }}
-
-  <h3>Create a new tag (optional)</h3>
-  {{ tag_form.as_p }}
+<div id="tag-suggestions" class="list-group shadow"></div>
   <button class="btn btn-primary" type="submit">Submit</button>
 </form>
 {% endblock %}
