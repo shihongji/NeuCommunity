@@ -1,10 +1,10 @@
 from django import forms
 from .models import Story, Category, Tag, Comment
-from ckeditor.widgets import CKEditorWidget
+from simplemde.widgets import SimpleMDEEditor
 
 
 class StoryForm(forms.ModelForm):
-    text = forms.CharField(widget=CKEditorWidget())
+    text = forms.CharField(widget=SimpleMDEEditor())
 
     class Meta:
         model = Story

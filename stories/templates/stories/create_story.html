@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
+{% block extra_head %}
 {% load bootstrap5 %}
-
 {% load static %}
-<script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
-
+<link rel="stylesheet" href="{% static 'simplemde/simplemde.min.css' %}">
+<script src="{% static 'simplemde/simplemde.min.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        new SimpleMDE({element: document.getElementById("id_text")});
+    });
+</script>
+{% endblock %}
 {% block content %}
 <h2>Submint a Story</h2>
 <form method="post">
@@ -16,12 +22,4 @@
   {{ tag_form.as_p }}
   <button class="btn btn-primary" type="submit">Submit</button>
 </form>
-<!--As I use `django-bootstrap5` customize the form rendering, I have to manually initialize the CKEditor-->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        if (typeof CKEDITOR !== 'undefined') {
-            CKEDITOR.replace('id_text');
-        }
-    });
-</script>
 {% endblock %}
