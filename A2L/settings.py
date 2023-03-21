@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'stories',
     'users',
     'bootstrap5',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -120,8 +121,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Configure django-ckeditor
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 500,
+        'width': '100%',
+    },
+}
+CKEDITOR_UPLOAD_PATH = 'uploads/ckeditor/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

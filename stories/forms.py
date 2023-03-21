@@ -1,8 +1,11 @@
 from django import forms
 from .models import Story, Category, Tag, Comment
+from ckeditor.widgets import CKEditorWidget
 
 
 class StoryForm(forms.ModelForm):
+    text = forms.CharField(widget=CKEditorWidget())
+
     class Meta:
         model = Story
         fields = ['title', 'url', 'text', 'category', 'tags']

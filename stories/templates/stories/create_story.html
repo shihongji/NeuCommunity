@@ -1,16 +1,27 @@
 {% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% load static %}
+<script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
 
 {% block content %}
 <h2>Submint a Story</h2>
 <form method="post">
   {% csrf_token %}
-  {{ form.as_p }}
-
+  {% bootstrap_form form %}
   <h3>Create a new category (optional)</h3>
   {{ category_form.as_p }}
 
   <h3>Create a new tag (optional)</h3>
   {{ tag_form.as_p }}
-  <button type="submit">Submit</button>
+  <button class="btn btn-primary" type="submit">Submit</button>
 </form>
+<!--As I use `django-bootstrap5` customize the form rendering, I have to manually initialize the CKEditor-->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof CKEDITOR !== 'undefined') {
+            CKEDITOR.replace('id_text');
+        }
+    });
+</script>
 {% endblock %}
