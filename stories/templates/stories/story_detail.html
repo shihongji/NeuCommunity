@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load bootstrap5 %}
 {% block content %}
 <div class="container">
  <div class="row">
@@ -19,18 +19,15 @@
      {% include 'stories/comment_tree.html' with comments=root_comments %}
    </div>
  </div> 
+ <div class="container col-md-8 mb-5">
+  <hr>
+  <h5 id="reply" class="mb-4">Add a comment</h3>
+  <form method="POST" action="{% url 'stories:add_comment' story.id %}">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <input type="hidden" id="parent_comment" name="parent_comment" value="">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  </div>
 </div>
-
-<hr>
-
-
-
-
-<h3 id="reply">Add a comment</h3>
-<form method="POST" action="{% url 'stories:add_comment' story.id %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="hidden" id="parent_comment" name="parent_comment" value="">
-  <button type="submit">Submit</button>
-</form>
 {% endblock %}

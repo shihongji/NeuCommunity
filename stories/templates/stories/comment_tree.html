@@ -1,17 +1,26 @@
 {% for comment in comments %}
 <div class="comment" style="margin-left: {{ level|default:0 }}px;">
-  <form method="post" action="{% url 'stories:upvote_comment' comment.id %}" style="display: inline;">
-    {% csrf_token %}
-    <p class="text-muted"><button type="submit" class="btn btn-outline-info btn-sm">Upvote</button>
-      {{ comment.upvotes }} votes | {{ comment.user.username }} | {{ comment.created|timesince }} ago</p>
-  </form>
-  <a href="#reply" onclick="document.getElementById('parent_comment').value={{ comment.id }};">Reply | </a>
-  <p style="inline-block;">{{ comment.text }}</p>
-
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <form method="post" action="{% url 'stories:upvote_comment' comment.id %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-info btn-sm">Upvote</button>
+            <span class="text-muted ms-2">{{ comment.upvotes }} votes | {{ comment.user.username }} | {{
+              comment.created|timesince }} ago</span>
+          </form>
+        </div>
+        <button type="button" class="btn btn-outline-secondary btn-sm"
+          onclick="document.getElementById('parent_comment').value={{ comment.id }}; document.getElementById('reply').scrollIntoView({ behavior: 'smooth' });">Reply</button>
+      </div>
+      <p class="mt-3">{{ comment.text }}</p>
+    </div>
+  </div>
+  {% with comment.replies.all as replies %}
+  {% if replies %}
+  {% include 'stories/comment_tree.html' with comments=replies level=level|default:20|add:20 %}
+  {% endif %}
+  {% endwith %}
 </div>
-{% with comment.replies.all as replies %}
-{% if replies %}
-{% include 'stories/comment_tree.html' with comments=replies level=level|default:20|add:20 %}
-{% endif %}
-{% endwith %}
 {% endfor %}
