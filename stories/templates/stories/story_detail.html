@@ -1,20 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ story.title }}</h1>
-<p>By {{ story.user.username }} | {{ story.created|timesince }} ago | {{ story.category.name }}</p>
-<p>{{ story.text }}</p>
-<p>Tags: {{ story.tags.all|join:", " }}</p>
-{% if story.url %}
-<p><a href="{{ story.url }}">External Link</a></p>
-{% else %}
-<p>{{ story.text }}</p>
-{% endif %}
+<div class="container">
+ <div class="row">
+   <div class="col-md-8 offset-md-2">
+     <h1 class="mt-4 mb-3">{{ story.title }}</h1> 
+     <p class="text-muted">{{ story.user.username }} | {{ story.created|timesince }} ago | {{ story.category.name }}</p>
+     <p class="text-muted">Tags: {{ story.tags.all|join:", " }}</p>
+     <hr>
+     {% if story.url %}
+      <p><a href="{{ story.url }}">External Link</a></p>
+     {% endif %}
+     <div class="story-content mb-4">
+       {{ story.text }} 
+     </div>
+     <hr>
+     <h5 id="comments" class="mb-4">Comments ({{ story.num_comments }})</h5>
+     {% include 'stories/comment_tree.html' with comments=root_comments %}
+   </div>
+ </div> 
+</div>
 
 <hr>
 
-<h3 id="comments">Comments ({{ story.num_comments }})</h3>
-{% include 'stories/comment_tree.html' with comments=root_comments %}
+
+
 
 <h3 id="reply">Add a comment</h3>
 <form method="POST" action="{% url 'stories:add_comment' story.id %}">

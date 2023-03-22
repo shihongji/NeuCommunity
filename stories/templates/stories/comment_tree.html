@@ -2,11 +2,12 @@
 <div class="comment" style="margin-left: {{ level|default:0 }}px;">
   <form method="post" action="{% url 'stories:upvote_comment' comment.id %}" style="display: inline;">
     {% csrf_token %}
-    <button type="submit" class="upvote-button">Upvote</button>
+    <p class="text-muted"><button type="submit" class="btn btn-outline-info btn-sm">Upvote</button>
+      {{ comment.upvotes }} votes | {{ comment.user.username }} | {{ comment.created|timesince }} ago</p>
   </form>
-  <p>{{ comment.upvotes }} votes | {{ comment.user.username }} | {{ comment.created|timesince }} ago</p>
-  <p>{{ comment.text }}</p>
-  <a href="#reply" onclick="document.getElementById('parent_comment').value={{ comment.id }};">Reply</a>
+  <a href="#reply" onclick="document.getElementById('parent_comment').value={{ comment.id }};">Reply | </a>
+  <p style="inline-block;">{{ comment.text }}</p>
+
 </div>
 {% with comment.replies.all as replies %}
 {% if replies %}
