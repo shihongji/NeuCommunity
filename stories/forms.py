@@ -4,16 +4,13 @@ from simplemde.widgets import SimpleMDEEditor
 
 
 class StoryForm(forms.ModelForm):
-    text = forms.CharField(widget=SimpleMDEEditor())
+    text = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}))
     category = forms.ModelChoiceField(
         queryset=Category.objects.all(), empty_label="Select a category")
 
     class Meta:
         model = Story
-        fields = ['title', 'url', 'text', 'category', 'tags']
-        widgets = {
-            'tags': forms.TextInput(attrs={'list': 'tags-list'}),
-        }
+        fields = ['title', 'url', 'text', 'category']
 
     # def __init__(self, *args, **kwargs):
     #     super(StoryForm, self).__init__(*args, **kwargs)

@@ -7,16 +7,21 @@
 
 {% block content %}
 <h2>Latest Stories</h2>
-<ul>
+<div class="container">
+  <div class="row">
   {% for story in stories %}
-  <li>
-    <a href="{{ story.url }}">{{ story.title }}</a> by {{ story.user.username }}
-    <br>
-    <small>{{ story.upvotes }} points | {{ story.created|timesince }} ago | {{ story.tags.all|first_two_tags }}
-    <a href="{% url 'stories:story_detail' story.id %}">Comments ({{ story.num_comments }})</a></small>
-  </li>
+  <div class="col-md-12 mb-3">
+    <div class="card border-0" >
+      <div> 
+        <h5 class="card-header bg-transparent fs-6"><a href="{% url 'stories:story_detail' story.id %}" class="text-dark text-decoration-none">
+{{ story.title }}</a></h5>
+      </div>
+      <div class="card-footer bg-transparent text-muted small lh-1">{{ story.upvotes }} points | {{ story.created|timesince }} ago | <mark>{{ story.tags.all|first_two_tags }}</mark> | {{ story.user.username }} | Comments ({{ story.num_comments }})</div>
+      </div>
+    </div>
   {% endfor %}
-</ul>
+  </div>
+</div>
 <div class="pagination">
   <span class="step-links">
     {% if stories.has_previous %}

@@ -3,6 +3,7 @@
 {% block content %}
 <h1>{{ story.title }}</h1>
 <p>By {{ story.user.username }} | {{ story.created|timesince }} ago | {{ story.category.name }}</p>
+<p>{{ story.text }}</p>
 <p>Tags: {{ story.tags.all|join:", " }}</p>
 {% if story.url %}
 <p><a href="{{ story.url }}">External Link</a></p>

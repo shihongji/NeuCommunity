@@ -18,7 +18,7 @@ def create_story(request):
             story = form.save(commit=False)
             story.user = request.user
             story.save()
-            story.tags.set(form.cleaned_data['tags'])
+            # story.tags.set(form.cleaned_data['tags'])
             return redirect('stories:home')
     else:
         form = StoryForm()
@@ -123,11 +123,11 @@ def upvote_comment(request, comment_id):
 # Autocomlete searth for tags, Add an endpoint to fetch tags.
 
 
-@login_required
-def search_tags(request):
-    query = request.GET.get('query', '').strip()
-    if query:
-        tags = Tag.objects.filter(name__icontains=query).values('name')
-        return JsonResponse(list(tags), safe=False)
-    else:
-        return JsonResponse([], safe=False)
+# @login_required
+# def search_tags(request):
+#     query = request.GET.get('query', '').strip()
+#     if query:
+#         tags = Tag.objects.filter(name__icontains=query).values('name')
+#         return JsonResponse(list(tags), safe=False)
+#     else:
+#         return JsonResponse([], safe=False)

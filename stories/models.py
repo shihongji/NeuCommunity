@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
+from simplemde.fields import SimpleMDEField
 
 # Create your models here.
 
@@ -13,7 +14,7 @@ class Category(models.Model):
 
 
 class Story(models.Model):
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, unique=True)
     url = models.URLField(blank=True, null=True)
     text = models.TextField(blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

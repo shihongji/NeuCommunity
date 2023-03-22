@@ -5,8 +5,6 @@
 <link rel="stylesheet" href="{% static 'simplemde/simplemde.min.css' %}">
 <script src="{% static 'simplemde/simplemde.min.js' %}"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        new SimpleMDE({element: document.getElementById("id_text")});
         const tagsInput = document.getElementById("id_tags");
 
         tagsInput.addEventListener("input", function (event) {
@@ -35,7 +33,6 @@
                 document.getElementById("tag-suggestions").innerHTML = "";
             }
         });
-    });
 </script>
 {% endblock %}
 {% block content %}
