@@ -1,33 +1,41 @@
 {% extends 'base.html' %}
 {% load bootstrap5 %}
+{%  block extra_head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/story_detail.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container">
- <div class="row">
-   <div class="col-md-8 offset-md-2">
-     <h1 class="mt-4 mb-3">{{ story.title }}</h1> 
-     <p class="text-muted">{{ story.user.username }} | {{ story.created|timesince }} ago | {{ story.category.name }}</p>
-     <p class="text-muted">Tags: {{ story.tags.all|join:", " }}</p>
+  <div class="story">
+    <div class="story-detail">
+      <h1 class="mt-4 mb-3">{{ story.title }}</h1> 
+      <p class="text-muted">{{ story.user.username }} | {{ story.created|timesince }} ago | {{ story.category.name }}</p>
+      <p class="text-muted">Tags: {{ story.tags.all|join:", " }}</p>
+      <hr>
+      {% if story.url %}
+       <p><a href="{{ story.url }}">External Link</a></p>
+      {% endif %}
+      <div class="story-content mb-4">
+        {{ story.text }} 
+      </div>
+      <hr>
+      <h5 id="comments" class="mb-4">Comments ({{ story.num_comments }})</h5>
+      {% include 'stories/comment_tree.html' with comments=root_comments %}
+    </div>
+ 
+    <div class="story-add-comment">
      <hr>
-     {% if story.url %}
-      <p><a href="{{ story.url }}">External Link</a></p>
-     {% endif %}
-     <div class="story-content mb-4">
-       {{ story.text }} 
+     <h5 id="reply" class="mb-4">Add a comment</h3>
+     <form method="POST" action="{% url 'stories:add_comment' story.id %}">
+       {% csrf_token %}
+       {% bootstrap_form form %}
+       <input type="hidden" id="parent_comment" name="parent_comment" value="">
+       <button type="submit" class="btn btn-primary">Submit</button>
+     </form>
      </div>
-     <hr>
-     <h5 id="comments" class="mb-4">Comments ({{ story.num_comments }})</h5>
-     {% include 'stories/comment_tree.html' with comments=root_comments %}
-   </div>
- </div> 
- <div class="container col-md-8 mb-5">
-  <hr>
-  <h5 id="reply" class="mb-4">Add a comment</h3>
-  <form method="POST" action="{% url 'stories:add_comment' story.id %}">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    <input type="hidden" id="parent_comment" name="parent_comment" value="">
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
   </div>
-</div>
+{% endblock %}
+
+{% block footer %}
+  <p>Footer information, such as links to About, Contact, and Help pages, etc.</p>
 {% endblock %}

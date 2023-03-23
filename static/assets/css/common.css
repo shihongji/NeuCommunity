@@ -15,10 +15,11 @@
   --body-loud-color: #000;
 
   --light-fg: #f8f9fa;
+  --card-bg: #f8f9fa;
+
 }
 
-html,
-body {
+html {
   height: 100%;
   margin: 0;
 
@@ -29,10 +30,6 @@ body {
   height: 100%;
   padding: 0;
   background-color: var(--primary-bg);
-}
-
-.row {
-  margin: 0;
 }
 
 header, .bg-info {
@@ -48,11 +45,14 @@ header, .bg-info {
   align-items: center;
 }
 
-.pagination {
-  justify-content: center;
-  background-color: var(--primary-bg);
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
 
-  padding: 0.5rem 0;
+.btn-primary:hover {
+  background-color: var(--secondary);
+  border-color: var(--secondary);
 }
 
 footer {

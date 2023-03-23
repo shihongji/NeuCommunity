@@ -1,0 +1,79 @@
+:root {
+  --primary:#B46060;
+  --secondary: #FFBF9B;
+  --primary-fg:#4D4D4D;
+  --primary-bg: #FFF4E0;
+
+  --body-bg: #fff;
+  --body-quiet-color: #666;
+  --body-loud-color: #000;
+
+  --light-fg: #f8f9fa;
+  --card-bg: #f8f9fa;
+
+}
+
+.cards {
+  padding: 1rem 0;
+}
+
+.card {
+  margin: 1rem;
+}
+
+.card-header {
+  flex-direction: row;
+  align-items: center;
+  background-color: var(--card-bg);
+
+  font-size: 1rem;
+}
+
+.card-title {
+  margin: 0 0.5rem;
+  font-size: 1.2rem;
+}
+
+.upvote-button {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 7px solid #B46060;
+  cursor: pointer;
+  margin: 0 0.5rem;
+}
+
+.card-footer {
+  background-color: #fff;
+}
+
+.card-data {
+  font-size: 1rem;
+  padding-left: 2rem;
+  background-color: inherit;
+}
+
+.card-header + .card-footer {
+  border-top: 0;
+}
+
+.pagination {
+  justify-content: center;
+  background-color: var(--primary-bg);
+
+  margin: 0;
+  padding: 1rem 0;
+}
+
+.page-item.active .page-link {
+  background-color: #B46060;
+  border-color: #B46060;
+}
+.page-link {
+  color: #4D4D4D;
+}
+
+.page-link:hover {
+  color: #B46060;
+}
