@@ -1,13 +1,13 @@
+import random
 import os
 import django
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'A2L.settings')
 django.setup()
-from stories.models import Story, Category, Tag
-from django.contrib.auth.models import User
-from faker import Faker
 from django.core.wsgi import get_wsgi_application
-import random
+from faker import Faker
+from django.contrib.auth.models import User
+from stories.models import Story, Category, Tag, Comment, Vote
 
 
 application = get_wsgi_application()
@@ -15,10 +15,10 @@ application = get_wsgi_application()
 
 fake = Faker()
 
-# You can custmorize the categories and tags as needed
-categories = ['Ask', 'Jobs', 'Trading', 'Housing', 'Dinning', 'Transportation']
-tags = ['Python', 'React', 'JavaScript', 'ML', 'AI', 'Silicon Valley', 'Seatle', 'Boston',
-        'San Fransico', 'INFO5100', 'ENCP6000', 'INFO6105', 'Hackerthon', 'Algorithm', 'Java']
+# You can customize the categories and tags as needed
+categories = ['Ask', 'Jobs', 'Trading', 'Housing', 'Dining', 'Transportation']
+tags = ['Python', 'React', 'JavaScript', 'ML', 'AI', 'Silicon Valley', 'Seattle', 'Boston',
+        'San Francisco', 'INFO5100', 'ENCP6000', 'INFO6105', 'Hackerthon', 'Algorithm', 'Java']
 
 # Creating categories
 for category_name in categories:
@@ -35,15 +35,43 @@ for _ in range(200):
     random_tags = random.sample(
         list(Tag.objects.all()), k=random.randint(1, len(tags)))
 
+    has_url = random.choice([True, False])
     story = Story.objects.create(
         title=fake.sentence(),
         user=random_user,
         category=random_category,
-        url=fake.uri() if random.choice([True, False]) else None,
-        text=fake.text() if not Story.url else None,
+        url=fake.uri() if has_url else None,
+        text=fake.text() if not has_url else None,
     )
 
     story.tags.set(random_tags)
     story.save()
 
-print("200 random stories created!")
+    # Generating random comments for the story
+    for _ in range(random.randint(0, 10)):
+        comment_user = random.choice(User.objects.all())
+        comment = Comment.objects.create(
+            user=comment_user,
+            story=story,
+            text=fake.sentence(),
+        )
+
+        # Generating random votes for the comment
+        for _ in range(random.randint(0, 5)):
+            vote_user = random.choice(User.objects.all())
+            Vote.objects.create(
+                user=vote_user,
+                comment=comment,
+                vote_type=random.choice([True, False]),
+            )
+
+    # Generating random votes for the story
+    for _ in range(random.randint(0, 20)):
+        vote_user = random.choice(User.objects.all())
+        Vote.objects.create(
+            user=vote_user,
+            story=story,
+            vote_type=random.choice([True, False]),
+        )
+
+print("200 random stories created with comments and votes!")
