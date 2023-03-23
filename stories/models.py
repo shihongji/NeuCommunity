@@ -17,9 +17,9 @@ class Story(models.Model):
     title = models.CharField(max_length=255, unique=True)
     url = models.URLField(blank=True, null=True)
     text = models.TextField(blank=True, null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='stories')
     created = models.DateTimeField(auto_now_add=True)
-    upvotes = models.IntegerField(default=int(0))
     favorites = models.ManyToManyField(
         User, related_name='favorites', blank=True)
     category = models.ForeignKey(
@@ -32,6 +32,11 @@ class Story(models.Model):
     def __str__(self):
         return self.title
 
+    def votes(self):
+        upvotes = self.vote_set.filter(vote_type=True).count()
+        downvotes = self.vote_set.filter(vote_type=False).count()
+        return upvotes - downvotes
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -41,14 +46,28 @@ class Tag(models.Model):
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='comments')
     story = models.ForeignKey(
         Story, related_name='comments', on_delete=models.CASCADE)
     parent_comment = models.ForeignKey(
         'self', on_delete=CASCADE, null=True, blank=True, related_name='replies')
     text = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
-    upvotes = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"{self.user.username}: {self.text[:20]}"
+
+    def votes(self):
+        upvotes = self.vote_set.filter(vote_type=True).count()
+        downvotes = self.vote_set.filter(vote_type=False).count()
+        return upvotes - downvotes
+
+
+class Vote(models.Model):
+    user = models.ForeignKey(User, on_delete=CASCADE)
+    story = models.ForeignKey(Story, on_delete=CASCADE, null=True, blank=True)
+    comment = models.ForeignKey(
+        Comment, on_delete=CASCADE, null=True, blank=True)
+    # True for upvote, False for downvote
+    vote_type = models.BooleanField(default=True)

@@ -3,7 +3,20 @@
 
 {% block header %}
 {% endblock %}
-
+{% block extra_head %}
+<style>
+.upvote-button {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 7px solid #B46060;
+  cursor: pointer;
+  margin-right: 5px;
+}
+</style>
+{% endblock %}
 {% block content %}
 <div class="container">
   <div class="row mt-3">
@@ -11,10 +24,12 @@
   <div class="col-md-12 mb-2">
     <div class="card border-0" >
       <div> 
-        <h5 class="card-header bg-transparent fs-6"><a href="{% url 'stories:story_detail' story.id %}" class="text-dark text-decoration-none">
+        <h5 class="card-header bg-transparent fs-6">
+        <span class="upvote-button" onclick="location.href='{% url 'stories:upvote_story' story.id %}'"></span>
+          <a href="{% url 'stories:story_detail' story.id %}" class="text-dark text-decoration-none">
 {{ story.title }}</a></h5>
       </div>
-      <div class="card-footer bg-transparent text-muted small lh-1">{{ story.upvotes }} points | {{ story.created|timesince }} ago | <mark>{{ story.tags.all|first_two_tags }}</mark> | {{ story.user.username }} | Comments ({{ story.num_comments }})</div>
+      <div class="card-footer bg-transparent text-muted small lh-1">{{ story.votes }} points | {{ story.created|timesince }} ago | <mark>{{ story.tags.all|first_two_tags }}</mark> | {{ story.user.username }} | Comments ({{ story.num_comments }})</div>
       </div>
     </div>
   {% endfor %}
