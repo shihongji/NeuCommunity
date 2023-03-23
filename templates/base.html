@@ -21,6 +21,15 @@
     {% block header %}{% endblock %}
     {% block content %}
     {% endblock %}
+    {% if messages %}
+    <div class="messages">
+    {% for message in messages %}
+      <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
   </main>
 
   <footer>
