@@ -57,6 +57,8 @@ def home(request):
         order_by = '-num_upvotes'
     elif order_by == 'new':
         order_by = '-created'
+    elif order_by == '-created':
+        order_by = '-created'
     else:
         order_by = '-num_upvotes'
 
@@ -77,6 +79,8 @@ def home(request):
 
     context = {
         'stories': stories,
+        'order_by': order_by,
+        'category_filter': category_filter,
     }
     return render(request, 'stories/home.html', context)
 
