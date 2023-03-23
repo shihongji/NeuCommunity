@@ -6,7 +6,6 @@
 {% block extra_head %}
 <style>
 .upvote-button {
-  display: inline-block;
   width: 0;
   height: 0;
   border-left: 5px solid transparent;
@@ -23,12 +22,13 @@
   {% for story in stories %}
   <div class="col-md-12 mb-2">
     <div class="card border-0" >
-      <div> 
-        <h5 class="card-header bg-transparent fs-6">
+      <div class="d-flex align-items-center">
+        <span class="me-2 text-muted">{{ forloop.counter }}.</span>
         <span class="upvote-button" onclick="location.href='{% url 'stories:upvote_story' story.id %}'"></span>
-          <a href="{% url 'stories:story_detail' story.id %}" class="text-dark text-decoration-none">
-{{ story.title }}</a></h5>
-      </div>
+
+        <div class="bg-transparent fs-6 ">
+                 <a href="{% url 'stories:story_detail' story.id %}" class="text-dark text-decoration-none">
+            {{ story.title }}</a></div></div>
       <div class="card-footer bg-transparent text-muted small lh-1">{{ story.votes }} points | {{ story.created|timesince }} ago | <mark>{{ story.tags.all|first_two_tags }}</mark> | {{ story.user.username }} | Comments ({{ story.num_comments }})</div>
       </div>
     </div>
