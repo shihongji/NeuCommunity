@@ -7,8 +7,8 @@
           <form method="post" action="{% url 'stories:upvote_comment' comment.id %}" style="display: inline;">
             {% csrf_token %}
             <button type="submit" class="btn btn-outline-info btn-sm">Upvote</button>
-            <span class="text-muted ms-2">{{ comment.upvotes }} votes | {{ comment.user.username }} | {{
-              comment.created|timesince }} ago</span>
+            <span class="text-muted ms-2">{{ comment.upvotes }} votes | {{ comment.user.username }} |
+              {{comment.created|timesince }} ago</span>
           </form>
         </div>
         <button type="button" class="btn btn-outline-secondary btn-sm"
