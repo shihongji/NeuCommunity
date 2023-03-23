@@ -11,6 +11,24 @@ from .forms import StoryForm, CommentForm
 # Create your views here.
 
 
+def search(request):
+    query = request.GET.get('q', '')
+    if query:
+        stories = Story.objects.filter(
+            Q(title__icontains=query) |
+            Q(text__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
+    else:
+        stories = Story.objects.none()
+
+    context = {
+        'stories': stories,
+        'query': query,
+    }
+    return render(request, 'stories/search.html', context)
+
+
 @login_required
 def upvote_story(request, story_id):
     story = get_object_or_404(Story, id=story_id)

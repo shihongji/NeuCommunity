@@ -15,20 +15,25 @@
     <li class="nav-item">
       <a class="nav-link link-light" href="{% url 'stories:submit' %}">Submit</a>
     </li>
-    <!-- User name and Login/Logout -->
-    <ul class="nav ms-auto">
-      {% if user.is_authenticated %}
-      <li class="nav-item">
-        <a class="nav-link link-light" href="{% url 'users:profile' user.id %}">{{ user.username }}</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link link-light" href="{% url 'users:logout' %}">Logout</a>
-      </li>
-      {% else %}
-      <li class="nav-item">
-        <a class="nav-link link-light" href="{% url 'users:login' %}">Login</a>
-      </li>
-      {% endif %}
-    </ul>
+    <!- Search Bar --->
+      <form action="{% url 'stories:search' %}" method="get" class="search-form">
+        <input type="text" name="q" placeholder="Search" value="{{ request.GET.q }}">
+        <button type="submit">Search</button>
+      </form>
+      <!-- User name and Login/Logout -->
+      <ul class="nav ms-auto">
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'users:profile' user.id %}">{{ user.username }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'users:logout' %}">Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'users:login' %}">Login</a>
+        </li>
+        {% endif %}
+      </ul>
   </nav>
 </header>
