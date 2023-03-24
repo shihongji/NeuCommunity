@@ -90,7 +90,7 @@ def home(request):
         ).order_by(order_by)
 
     # Show 20 stories per page
-    paginator = Paginator(stories_list, 20)
+    paginator = Paginator(stories_list, 30)
 
     page = request.GET.get('page')
     stories = paginator.get_page(page)

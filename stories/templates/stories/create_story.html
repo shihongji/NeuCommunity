@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block extra_head %}
 {% load bootstrap5 %}
+
 {% load static %}
 <link rel="stylesheet" href="{% static 'simplemde/simplemde.min.css' %}">
 <script src="{% static 'simplemde/simplemde.min.js' %}"></script>
@@ -36,11 +37,11 @@
 </script>
 {% endblock %}
 {% block content %}
-<h2>Create New</h2>
-<form method="post">
+<h3 class="fw-bold mx-5 mt-4 text-black-50">Create New Post</h3>
+<form method="post" class="form mx-5 my-3 d-grid gap-2">
   {% csrf_token %}
-  {% bootstrap_form form %}
+  {% bootstrap_form form layout="inline" %}
 <div id="tag-suggestions" class="list-group shadow"></div>
-  <button class="btn btn-primary" type="submit">Submit</button>
+  <button class="btn btn-primary" style="width:100px;" type="submit">Submit</button>
 </form>
 {% endblock %}
