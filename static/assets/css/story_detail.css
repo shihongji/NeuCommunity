@@ -1,0 +1,24 @@
+:root {
+  --primary:#B46060;
+  --secondary: #FFBF9B;
+  --primary-fg:#4D4D4D;
+  --primary-bg: #FFF4E0;
+
+  --body-bg: #fff;
+  --body-quiet-color: #666;
+  --body-loud-color: #000;
+
+  --light-fg: #f8f9fa;
+  --card-bg: #f8f9fa;
+
+}
+
+.story {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 2rem;
+  padding: 1rem 2rem;
+  border-radius: 30px;
+
+  background-color: #fff;
+}
