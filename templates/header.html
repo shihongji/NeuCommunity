@@ -1,7 +1,9 @@
 <header>
+  {% load static %}
   <nav class="nav bg-info h6">
     <li class="nav-item">
-      <a class="nav-link link-light" href="{% url 'stories:home' %}">A2L</a>
+      <a class="nav-link link-light" href="{% url 'stories:home' %}"><img src="{% static 'images/LOGO_48.png' %}"
+          alt="]\[" width="36"></a>
     </li>
     <li class="nav-item">
       <a class="nav-link link-light" href="{% url 'stories:home' %}?category=ask">Ask</a>
