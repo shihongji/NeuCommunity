@@ -7,6 +7,7 @@
 <p>LinkedIn: {{ user_profile.linkedin_address }}</p>
 <p>Email: {{ user.email }}</p>
 
+{% comment %} -- Need to figure out better display structure.
 <h3>Submissions</h3>
 <ul>
   {% for story in user_stories %}
@@ -17,7 +18,9 @@
   <li>No submissions yet.</li>
   {% endfor %}
 </ul>
+{% endcomment %}
 
+{% comment %} -- Need to figure out better display structure.
 <h3>Comments</h3>
 <ul>
   {% for comment in user_comments %}
@@ -30,4 +33,5 @@
   <li>No comments yet.</li>
   {% endfor %}
 </ul>
+{% endcomment %}
 {% endblock %}
