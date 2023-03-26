@@ -10,12 +10,17 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     favorite_stories = models.ManyToManyField(
         'stories.Story', related_name='favorited_by', blank=True)
+    description = models.TextField(blank=True, null=True)
     blog_site = models.URLField(
         max_length=255, blank=True, null=True, verbose_name="Blog")
     github_address = models.URLField(
         max_length=255, blank=True, null=True, verbose_name="GitHub")
     linkedin_address = models.URLField(
         max_length=255, blank=True, null=True, verbose_name="LinkedIn")
+    twitter_address = models.URLField(
+        max_length=255, blank=True, null=True, verbose_name="Twitter")
+    instagram_address = models.URLField(
+        max_length=255, blank=True, null=True, verbose_name="Instagram")
 
     def __str__(self):
         return self.user.username

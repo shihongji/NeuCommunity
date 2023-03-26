@@ -28,7 +28,7 @@
 }
 .btn-contact:hover {
 }
-a {
+#sns {
   color: #6c757d;
   margin-left: 0.6em;
 }
@@ -37,5 +37,5 @@ a:hover {
 }
 h1 {
   font-family: 'East Sea Dokdo', cursive;
-  font-weight: 100;
+  font-weight: 200;
 }

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block extra_head %}
 {% load static %}
+{% load markdown_extras %}
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <script src="https://kit.fontawesome.com/b102c16ea9.js" crossorigin="anonymous"></script>
@@ -19,26 +20,26 @@
             <img src="{% static 'images/sample.png' %}" alt="{{ user.username }}'s profile picture" class="img-fluid ">
           </div>
           <div class="col-md-6 my-4 px-5">
-           <h1 class="card-title mt-5">Hi, I'm {{ user.username }}</h1>
-           <p class="card-text text-muted my-5 me-5">lLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.uptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+           <h1 class="card-title mt-5 mb-3">Hi, I'm {{ user.username }}</h1>
+           <p class="card-text me-5 max" style="max-height:320px; overflow: auto;">{{ user_profile.description|markdown| safe}}</p>
           <div class="mb-3 me-5 d-flex align-items-center justify-content-center">
             <a href="mailto:{{ user.email }}" class="btn btn-contact">GET IN TOUCH<i class="ms-3 fa-solid fa-envelope"></i></a>
           </div>
           <div class="mb-3 me-5 d-flex align-items-center justify-content-center">
             <a href="{{ user_profile.blog_site }}" target="_blank">
-              <i class="fa-solid fa-blog fa-lg"></i>
+              <i id="sns" class="fa-solid fa-blog fa-lg"></i>
             </a>
             <a href="{{ user_profile.github_address }}" target="_blank">
-              <i class="fa-brands fa-github fa-lg"></i>
+              <i id="sns" class="fa-brands fa-github fa-lg"></i>
             </a>
             <a href="{{ user_profile.linkedin_address }}" target="_blank">
-              <i class="fa-brands fa-linkedin fa-lg"></i>
+              <i id="sns" class="fa-brands fa-linkedin fa-lg"></i>
             </a>
              <a href="{{ user_profile.twitter_address }}" target="_blank">
-              <i class="fa-brands fa-twitter fa-lg"></i>
+              <i id="sns" class="fa-brands fa-twitter fa-lg"></i>
             </a>
              <a href="{{ user_profile.instagram_address }}" target="_blank">
-              <i class="fa-brands fa-square-instagram fa-lg"></i>
+              <i id="sns" class="fa-brands fa-square-instagram fa-lg"></i>
             </a>
           </div>
           </div>
