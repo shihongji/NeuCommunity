@@ -1,0 +1,41 @@
+.bg-g {
+  background: linear-gradient(to right, #efd8be, #e6b1ac);
+  min-height: 100vh;
+  align-content: center;
+}
+
+.card-body {
+  padding: 0;
+  background: #fffbf7;
+  overflow: hidden;
+}
+
+.card-body img {
+  /* border-radius: 10%; */
+  /* border: 2px solid white; */
+}
+
+#pic {
+}
+
+.btn-contact {
+  background-color: #ff6d6f; /* set background color */
+  color: #fff; /* set text color */
+  border: none; /* remove border */
+  border-radius: 2rem; /* add border radius */
+  padding: 8px 30px; /* add padding */
+  font-weight: 700;
+}
+.btn-contact:hover {
+}
+a {
+  color: #6c757d;
+  margin-left: 0.6em;
+}
+a:hover {
+  color: #ff6d6f;
+}
+h1 {
+  font-family: 'East Sea Dokdo', cursive;
+  font-weight: 100;
+}

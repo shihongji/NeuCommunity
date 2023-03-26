@@ -43,8 +43,8 @@ def custom_logout(request):
 
 
 @login_required
-def profile(request, user_id):
-    user = get_object_or_404(User, id=user_id)
+def profile(request, username):
+    user = get_object_or_404(User, username=username)
     user_profile = user.userprofile
     user_stories = Story.objects.filter(user=user).order_by('-created')
     user_comments = Comment.objects.filter(
