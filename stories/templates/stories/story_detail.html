@@ -9,7 +9,9 @@
   <div class="story">
     <div class="story-detail">
       <h1 class="mt-4 mb-3">{{ story.title }}</h1> 
-      <p class="text-muted">{{ story.user.username }} | {{ story.created|timesince }} ago | {{ story.category.name }}</p>
+      <p class="text-muted">
+      <a class="link-muted" href="{% url 'users:profile' story.user.username %}">{{ story.user.username }}</a>
+      | {{ story.created|timesince }} ago | {{ story.category.name }}</p>
       <p class="text-muted">Tags: {{ story.tags.all|join:", " }}</p>
       <hr>
       {% if story.url %}
