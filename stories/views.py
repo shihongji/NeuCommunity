@@ -38,20 +38,6 @@ def search(request):
 
 
 @login_required
-def upvote_story(request, story_id):
-    story = get_object_or_404(Story, id=story_id)
-    vote, created = Vote.objects.get_or_create(
-        user=request.user, story=story, defaults={'vote_type': True})
-
-    if not created:
-        messages.error(request, "You have already voted for this story.")
-    else:
-        messages.success(request, "Upvote added.")
-
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-
-@login_required
 def create_story(request):
     if request.method == 'POST':
         form = StoryForm(request.POST)
@@ -76,17 +62,17 @@ def index(request):
 
 
 def home(request):
-    order_by = request.GET.get('order_by', 'votes')
+    order_by = request.GET.get('order_by', '-votes')
     category_filter = request.GET.get('category', None)
 
     if order_by == 'votes':
-        order_by = '-num_upvotes'
+        order_by = '-votes'
     elif order_by == 'new':
         order_by = '-created'
     elif order_by == '-created':
         order_by = '-created'
     else:
-        order_by = '-num_upvotes'
+        order_by = '-votes'
 
     if category_filter:
         stories_list = Story.objects.annotate(
@@ -132,8 +118,10 @@ def story_detail(request, story_id):
         form = CommentForm()
 
     root_comments = story.comments.filter(
-        parent_comment__isnull=True).annotate(
-        num_upvotes=Count('vote', filter=Q(vote__vote_type=True))).order_by('-num_upvotes')
+        parent_comment__isnull=True
+    ).annotate(
+        num_upvotes=Count('vote', filter=Q(vote__vote_type=True))
+    ).order_by('-num_upvotes', '-created')
     context = {
         'story': story,
         'form': form,
@@ -162,19 +150,37 @@ def add_comment(request, story_id):
     }
     return render(request, 'stories/story_detail.html', context)
 
-# Upvote for comment
+# Upvote
+
+
+@login_required
+def upvote_story(request, story_id):
+    story = get_object_or_404(Story, id=story_id)
+    vote = Vote.objects.filter(user=request.user, story=story).first()
+    if not vote:
+        vote = Vote(user=request.user, story=story, vote_type=True)
+        vote.save()
+        story.votes += 1
+        story.save()
+        messages.success(request, "Upvote added.")
+    else:
+        messages.error(request, "You have already voted for this story.")
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
 def upvote_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
-    vote, created = Vote.objects.get_or_create(
-        user=request.user, comment=comment, defaults={'vote_type': True})
-
-    if not created:
-        messages.error(request, "You have already voted for this comment.")
-    else:
+    vote = Vote.objects.filter(user=request.user, comment=comment).first()
+    if not vote:
+        vote = Vote(user=request.user, comment=comment, vote_type=True)
+        vote.save()
+        comment.votes += 1
+        comment.save()
         messages.success(request, "Upvote added.")
+    else:
+        messages.error(request, "You have already voted for this comment.")
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 # Autocomlete searth for tags, Add an endpoint to fetch tags.

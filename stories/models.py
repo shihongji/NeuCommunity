@@ -25,17 +25,13 @@ class Story(models.Model):
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, blank=True, null=True)
     tags = models.ManyToManyField('Tag', blank=True)
+    votes = models.IntegerField(default=0)
 
     def num_comments(self):
         return self.comments.count()
 
     def __str__(self):
         return self.title
-
-    def votes(self):
-        upvotes = self.vote_set.filter(vote_type=True).count()
-        downvotes = self.vote_set.filter(vote_type=False).count()
-        return upvotes - downvotes
 
 
 class Tag(models.Model):
@@ -54,14 +50,10 @@ class Comment(models.Model):
         'self', on_delete=CASCADE, null=True, blank=True, related_name='replies')
     text = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
+    votes = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.user.username}: {self.text[:20]}"
-
-    def votes(self):
-        upvotes = self.vote_set.filter(vote_type=True).count()
-        downvotes = self.vote_set.filter(vote_type=False).count()
-        return upvotes - downvotes
 
 
 class Vote(models.Model):
@@ -71,3 +63,14 @@ class Vote(models.Model):
         Comment, on_delete=CASCADE, null=True, blank=True)
     # True for upvote, False for downvote
     vote_type = models.BooleanField(default=True)
+
+    def save(self, *args, **kwargs):
+        if self.comment:
+            self.comment.votes = Vote.objects.filter(comment=self.comment, vote_type=True).count(
+            ) - Vote.objects.filter(comment=self.comment, vote_type=False).count()
+            self.comment.save()
+        elif self.story:
+            self.story.votes = Vote.objects.filter(story=self.story, vote_type=True).count(
+            ) - Vote.objects.filter(story=self.story, vote_type=False).count()
+            self.story.save()
+        super(Vote, self).save(*args, **kwargs)
