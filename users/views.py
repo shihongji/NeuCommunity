@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate, logout
+from django.contrib import messages
 # from django.contrib.auth.forms import UserCreationForm
 from django.urls import is_valid_path, reverse
 from django.http import HttpResponse, HttpResponseRedirect
@@ -21,11 +22,19 @@ def custom_login(request):
 
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse('stories:home'))
-        else:
-            return HttpResponse("Invalid username or password.")
+            messages.success(request, "You have successfully logged in.")
+            next_url = request.GET.get('next', None)
+            if next_url:
+                return redirect(next_url)
+            else:
+                return redirect(reverse('stories:home'))
 
-    return render(request, 'users/login.html')
+        else:
+            messages.error(request, "Invalid username or password.")
+            return render(request, 'users/login.html')
+
+    else:
+        return render(request, 'users/login.html')
 
 
 def custom_logout(request):
@@ -52,15 +61,22 @@ def profile(request, user_id):
 
 def register(request):
     if request.method == 'POST':
+        print("I'm POSTing")
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
+            print("I'm valid, then save")
             user = form.save()
+            print("I'm saving")
             # UserProfile will be created automatically by the post_save signal, so I comment below.
             # Create the UserProfile
             # profile = UserProfile(user=user)
             # profile.save()
             login(request, user)
             return redirect('stories:home')
+        else:
+            messages.error(
+                request, 'There was an error with your registration. Please correct the errors below.')
     else:
         form = CustomUserCreationForm()
-    return render(request, 'registration/register.html', {'form': form})
+        print("I'm creating new")
+    return render(request, 'registration/registersty.html', {'form': form})

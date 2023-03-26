@@ -103,6 +103,7 @@ def home(request):
     return render(request, 'stories/home.html', context)
 
 
+@login_required
 def story_detail(request, story_id):
     story = get_object_or_404(Story, pk=story_id)
     if request.method == 'POST':

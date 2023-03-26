@@ -143,3 +143,6 @@ CKEDITOR_UPLOAD_PATH = 'uploads/ckeditor/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# Set for @login_required decorator, to my custom login page
+LOGIN_URL = '/users/login/'

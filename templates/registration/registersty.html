@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center my-5">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body">
+          <h1 class="text-center mb-4" style="color:var(--primary)">Register</h1>
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp"
+                placeholder="Enter username">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp"
+                placeholder="Enter email">
+              <div id="emailHelp" class="form-text">Please use Northeastern.edu email</div>
+            </div>
+            <div class="mb-3">
+              <label for="password1" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password1" name="password1" placeholder="Password">
+            </div>
+            <div class="mb-3">
+              <label for="password2" class="form-label">Confirm Password</label>
+              <input type="password" class="form-control" id="password2" name="password2"
+                placeholder="Confirm Password">
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+          </form>
+          <p class="text-center mt-3">Already have an account? <a href="{% url 'users:login' %}">Log in</a></p>
+        {% if form.errors %}
+<div class="alert alert-danger">
+  <ul>
+    {% for field, errors in form.errors.items %}
+      {% for error in errors %}
+      <li>{{ field }}: {{ error }}</li>
+      {% endfor %}
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
