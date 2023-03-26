@@ -1,0 +1,34 @@
+:root {
+  --primary:#B46060;
+  --secondary: #FFBF9B;
+  --primary-fg:#4D4D4D;
+  --primary-bg: #FFF4E0;
+
+  --body-bg: #fff;
+  --body-quiet-color: #666;
+  --body-loud-color: #000;
+
+  --light-fg: #f8f9fa;
+  --card-bg: #f8f9fa;
+
+}
+
+.pagination {
+  justify-content: center;
+  background-color: var(--primary-bg);
+
+  margin: 0;
+  padding: 1rem 0;
+}
+
+.page-item.active .page-link {
+  background-color: #B46060;
+  border-color: #B46060;
+}
+.page-link {
+  color: #4D4D4D;
+}
+
+.page-link:hover {
+  color: #B46060;
+}

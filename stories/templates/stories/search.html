@@ -1,19 +1,70 @@
 {% extends 'base.html' %}
-
+{% block extra_head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/search.css' %}">
+{% endblock %}
 {% block content %}
-<<div class="container">
-  <h2>Search Results</h2>
-  {% if stories %}
-  <p>Results for "{{ query }}":</p>
-  <ul>
-    {% for story in stories %}
-    <li>
-      <a href="{% url 'stories:story_detail' story.id %}">{{ story.title }}</a>
-    </li>
-    {% endfor %}
-  </ul>
-  {% else %}
-  <p>No results found for "{{ query }}".</p>
-  {% endif %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        {% if stories %}
+        <h3 class="mx-auto my-3 fw-bold text-secondary"><em>{{ count }} Results for "{{ query }}":</em></h3>
+          <ul class="list-group">
+            {% for story in stories %}
+              <li class="list-group-item my-1 shadow-sm">
+                <a href="{% url 'stories:story_detail' story.id %}" class="text-decoration-none text-dark">
+                  <span class="card-no me-2 text-muted">{{ forloop.counter }}.</span>
+                  {{ story.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+          <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center mt-4">
+              {% if stories.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ stories.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+              {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&laquo;</a>
+                </li>
+              {% endif %}
+
+              {% for i in stories.paginator.page_range %}
+                {% if i >= stories.number|add:-5 and i <= stories.number|add:4 %}
+                  {% if stories.number == i %}
+                    <li class="page-item active" aria-current="page">
+                      <a class="page-link" href="#">{{ i }}</a>
+                    </li>
+                  {% else %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ i }}{% if query %}&q={{ query }}{% endif %}">{{ i }}</a>
+                    </li>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+
+              {% if stories.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ stories.next_page_number }}{% if query %}&q={{ query }}{% endif %}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&raquo;</a>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+        {% else %}
+        <div class="row" style="height: 600px;">
+          <div class="d-flex mx-auto my-3 text-secondary align-items-center justify-content-center"><h3 class="fw-bold"><em>No results found for "{{ query }}".</em></h3></div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
   </div>
-  {% endblock %}
+{% endblock %}

@@ -19,12 +19,20 @@ def search(request):
             Q(text__icontains=query) |
             Q(tags__name__icontains=query)
         ).distinct()
+        count = stories.count()
     else:
         stories = Story.objects.none()
+        count = 0
+
+# Pagination
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(stories, 50)
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'stories': stories,
+        'stories': page_obj,
         'query': query,
+        'count': count,
     }
     return render(request, 'stories/search.html', context)
 
