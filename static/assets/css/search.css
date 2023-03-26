@@ -32,3 +32,8 @@
 .page-link:hover {
   color: #B46060;
 }
+
+.list-group-item:hover {
+  /* background-color: rgba(231, 171, 154, 0.5); */
+  transform: scale(1.1);
+}
