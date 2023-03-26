@@ -17,10 +17,10 @@
     <li class="nav-item">
       <a class="nav-link link-light" href="{% url 'stories:submit' %}">Submit</a>
     </li>
-    <!- Search Bar --->
-      <form action="{% url 'stories:search' %}" method="get" class="search-form">
-        <input type="text" name="q" placeholder="Search" value="{{ request.GET.q }}">
-        <button type="submit">Search</button>
+    <!-- Search Bar --->
+      <form action="{% url 'stories:search' %}" method="get" class="mx-auto d-flex">
+        <input class="form-control me-2" type="text" name="q" placeholder="Search" value="{{ request.GET.q }}">
+        <button class="btn btn-outline-light" type="submit">Search</button>
       </form>
       <!-- User name and Login/Logout -->
       <ul class="nav ms-auto">
