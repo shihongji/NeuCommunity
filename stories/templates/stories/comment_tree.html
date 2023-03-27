@@ -1,3 +1,4 @@
+{% load markdown_extras %}
 {% for comment in comments %}
 <div class="comment" style="margin-left: {{ level|default:0 }}px;">
   <div class="card mb-3">
@@ -10,7 +11,7 @@
         <button type="button" class="btn btn-outline-secondary btn-sm ms-3"
           onclick="document.getElementById('parent_comment').value={{ comment.id }}; document.getElementById('reply').scrollIntoView({ behavior: 'smooth' });">Reply</button>
       </div>
-      <p class="mt-1">{{ comment.text }}</p>
+      <p class="mt-1">{{ comment.text|markdown|safe }}</p>
     </div>
   </div>
   {% with comment.replies.all as replies %}

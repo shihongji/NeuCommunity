@@ -4,7 +4,7 @@ from simplemde.widgets import SimpleMDEEditor
 
 
 class StoryForm(forms.ModelForm):
-    text = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}))
+    text = forms.CharField(widget=forms.Textarea(attrs={'rows': 20}))
     category = forms.ModelChoiceField(
         queryset=Category.objects.all(), empty_label="Select a category (required)")
 

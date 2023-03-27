@@ -3,6 +3,11 @@
 {%  block extra_head %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/story_detail.css' %}">
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+{% load markdown_extras %}
 {% endblock %}
 
 {% block content %}
@@ -18,7 +23,7 @@
        <p><a href="{{ story.url }}">External Link</a></p>
       {% endif %}
       <div class="story-content mb-4">
-        {{ story.text }} 
+        {{ story.text|markdown|safe }} 
       </div>
       <hr>
       <h5 id="comments" class="mb-4">Comments ({{ story.num_comments }})</h5>
