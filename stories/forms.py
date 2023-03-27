@@ -1,6 +1,5 @@
 from django import forms
 from .models import Story, Category, Comment
-from simplemde.widgets import SimpleMDEEditor
 
 
 class StoryForm(forms.ModelForm):
