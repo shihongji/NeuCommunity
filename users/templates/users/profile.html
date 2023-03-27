@@ -32,7 +32,8 @@
           </div>
           <div class="col-md-6 my-4 px-5">
            <h1 class="card-title mt-5 mb-3">Hi, I'm {{ user.username }}</h1>
-           <div class="card-text me-5 max" style="max-height:380px; overflow: auto;">{{ user_profile.description|markdown| safe}}</div>
+           <div class="card-text me-5 max" style="max-height:380px; min-height: 200px; overflow: auto;">
+             {% if user_profile.description %}{{ user_profile.description|markdown| safe}}{% endif %}</div>
           <div class="my-3 me-5 d-flex align-items-center justify-content-center">
             <a href="mailto:{{ user.email }}" class="btn btn-contact">GET IN TOUCH<i class="ms-3 fa-solid fa-envelope"></i></a>
           </div>
