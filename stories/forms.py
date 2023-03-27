@@ -1,16 +1,16 @@
 from django import forms
-from .models import Story, Category, Tag, Comment
+from .models import Story, Category, Comment
 from simplemde.widgets import SimpleMDEEditor
 
 
 class StoryForm(forms.ModelForm):
-    text = forms.CharField(widget=forms.Textarea(attrs={'rows': 20}))
+    # text = forms.CharField(widget=forms.Textarea(attrs={'rows': 20}))
     category = forms.ModelChoiceField(
         queryset=Category.objects.all(), empty_label="Select a category (required)")
 
     class Meta:
         model = Story
-        fields = ['title', 'url', 'text', 'category']
+        fields = ['title', 'url', 'text', 'category', 'tags_new']
 
     # def __init__(self, *args, **kwargs):
     #     super(StoryForm, self).__init__(*args, **kwargs)

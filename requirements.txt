@@ -24,3 +24,4 @@ Faker
 sqlparse
 setuptools
 markdown
+django-taggit

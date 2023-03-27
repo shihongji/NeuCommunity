@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'users',
     'bootstrap5',
     'simplemde',
+    'taggit',
 ]
 
 MIDDLEWARE = [

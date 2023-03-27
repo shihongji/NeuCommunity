@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.db.models import Count, Q
-from .models import Story, Comment, Tag, Vote
+from .models import Story, Comment, Vote
 from .forms import StoryForm, CommentForm
 
 # Create your views here.
@@ -42,13 +42,15 @@ def search(request):
 def create_story(request):
     if request.method == 'POST':
         form = StoryForm(request.POST)
-
         if form.is_valid():
             story = form.save(commit=False)
             story.user = request.user
             story.save()
             # story.tags.set(form.cleaned_data['tags'])
+            messages.success(request, 'Story created successfully.')
             return redirect('stories:home')
+        else:
+            messages.error(request, 'Form is not valid.')
     else:
         form = StoryForm()
 

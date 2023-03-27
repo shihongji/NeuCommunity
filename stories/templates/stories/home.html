@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load story_tags %} 
 {% block extra_head %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
@@ -16,7 +15,7 @@
       </div>
         <div class="card-footer">
           <span class="card-data bg-transparent text-muted small lh-1">
-            {{ story.votes }} points | {{ story.created|timesince }} ago | <mark>{{ story.tags.all|first_two_tags }}</mark> | {{ story.user.username }} | Comments ({{ story.num_comments }})
+            {{ story.votes }} points | {{ story.created|timesince }} ago | <mark>{{ story.tags_new.all|join:", " }}</mark> | {{ story.user.username }} | Comments ({{ story.num_comments }})
           </span>
         </div>
       </div>

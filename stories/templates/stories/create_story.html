@@ -37,11 +37,49 @@
 </script>
 {% endblock %}
 {% block content %}
-<h3 class="fw-bold mx-5 mt-4 text-black-50">Post</h3>
-<form method="post" class="form mx-5 my-3 d-grid gap-2">
+<form method="post" class="form mx-5 my-3">
   {% csrf_token %}
-  {% bootstrap_form form layout="inline" %}
-<div id="tag-suggestions" class="list-group shadow"></div>
+  <div class="form-group">
+    <label for="post_title" class="form-label">Title</label>
+    <input type="text" class="form-control" id="post_title" name="title" maxlength="255" required>
+    </div>
+  <div class="form-group">
+    <label for="post_url" class="form-label">Url</label>
+    <input type="url" class="form-control" id="post_url" name="url" maxlength="255" >
+    </div>
+  <div class="form-group">
+    <label for="{{ form.text.id_for_label }}" class="form-label">Content</label>
+    <textarea rows="8" class="form-control" name="{{ form.text.name }}" id="{{ form.text.id_for_label }}"></textarea>
+  </div>
+  <div class="form-group">
+    <label for="post_category" class="form-label">Category:</label>
+      <select name="{{ form.category.name }}" id="{{ form.category.id_for_label }}">
+        <option value=""{% if not form.category.value %} selected{% endif %}>Select a category (required)</option>
+        {% for category in form.category.field.choices.queryset %}
+          <option value="{{ category.pk }}"{% if form.category.value == category.pk %} selected{% endif %}>{{ category.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  <div class="form-group">
+    <label for="{{ form.tags.id_for_label }}" class="form-label">Tags</label>
+    <input type="text" id="{{ form.tags.id_for_label }}" name="{{ form.tags.name }}" class="form-control" placeholder="Enter tags separated by comma or space" value="{{ form.tags.value|default:'' }}">
+    {% if form.tags.errors %}
+      <div class="invalid-feedback">{{ form.tags.errors }}</div>
+    {% endif %}
+  </div>
   <button class="btn btn-primary" style="width:100px;" type="submit">Submit</button>
 </form>
+
+{% if form.errors %}
+  <div class="alert alert-danger">
+    <strong>Oops! There was an error:</strong>
+    <ul>
+    {% for field in form %}
+      {% for error in field.errors %}
+        <li>{{ field.label }}: {{ error }}</li>
+      {% endfor %}
+    {% endfor %}
+    </ul>
+  </div>
+{% endif %}
 {% endblock %}
