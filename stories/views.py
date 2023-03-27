@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib import messages
@@ -100,6 +101,7 @@ def home(request):
 @login_required
 def story_detail(request, story_id):
     story = get_object_or_404(Story, pk=story_id)
+    is_owner = story.user == request.user
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -126,6 +128,7 @@ def story_detail(request, story_id):
         'story': story,
         'form': form,
         'root_comments': root_comments,
+        'is_owner': is_owner,
     }
     return render(request, 'stories/story_detail.html', context)
 
@@ -183,14 +186,50 @@ def upvote_comment(request, comment_id):
         messages.error(request, "You have already voted for this comment.")
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-# Autocomlete searth for tags, Add an endpoint to fetch tags.
 
 
-# @login_required
-# def search_tags(request):
-#     query = request.GET.get('query', '').strip()
-#     if query:
-#         tags = Tag.objects.filter(name__icontains=query).values('name')
-#         return JsonResponse(list(tags), safe=False)
-#     else:
-#         return JsonResponse([], safe=False)
+def is_story_owner(function):
+    def wrap(request, *args, **kwargs):
+        story_id = kwargs['story_id']
+        story = get_object_or_404(Story, id=story_id)
+
+        if not request.user.is_authenticated:
+            messages.error(request, "You need to login first.")
+            return redirect(reverse('login'))
+
+        if not story.user == request.user:
+            messages.error(
+                request, "You do not have permission to perform this action.")
+            return redirect(reverse('stories:story_detail', args=[story_id]))
+
+        return function(request, *args, **kwargs)
+
+    return wrap
+
+
+@is_story_owner
+def edit_story(request, story_id):
+    story = get_object_or_404(Story, id=story_id)
+    if request.method == 'POST':
+        form = StoryForm(request.POST, instance=story)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your post has been updated.')
+            return redirect(reverse('stories:story_detail', args=[story_id]))
+    else:
+        form = StoryForm(instance=story)
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'stories/create_story.html', context)
+    # Autocomlete searth for tags, Add an endpoint to fetch tags.
+
+    # @login_required
+    # def search_tags(request):
+    #     query = request.GET.get('query', '').strip()
+    #     if query:
+    #         tags = Tag.objects.filter(name__icontains=query).values('name')
+    #         return JsonResponse(list(tags), safe=False)
+    #     else:
+    #         return JsonResponse([], safe=False)
