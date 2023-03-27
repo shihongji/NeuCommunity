@@ -39,33 +39,38 @@
 {% block content %}
 <form method="post" class="form mx-5 my-3">
   {% csrf_token %}
-  <div class="form-group">
-    <label for="post_title" class="form-label">Title</label>
+  <div class="form-group my-3">
+    <label for="post_title" class="form-label fw-bold">Title</label>
     <input type="text" class="form-control" id="post_title" \
     name="title" maxlength="255" \
-    value="{{ form.title.value }}" \
+                 value="{% if request.path|slice:"-4:" == 'edit' %}{{ form.title.value }}{% endif %}" \
+                 placeholder="Enter a catchy and descriptive title for your post" \
     required>
     </div>
-  <div class="form-group">
-    <label for="post_url" class="form-label">Url</label>
-    <input type="url" class="form-control" id="post_url" name="url" maxlength="255"\
-                                                                    value="{{ form.url.value }}">
+  <div class="form-group my-3">
+    <label for="post_url" class="form-label fw-bold">Url</label>
+    <input type="url" class="form-control" id="post_url" \
+      name="url" maxlength="255"\
+                 placeholder="Provide a external link, if desired"\
+                                                                    value="{% if request.path|slice:"-4:" == 'edit' %}{{ form.url.value }}{% endif %}">
     </div>
-  <div class="form-group">
-    <label for="{{ form.text.id_for_label }}" class="form-label">Content</label>
-    <textarea rows="8" class="form-control" name="{{ form.text.name }}" id="{{ form.text.id_for_label }}">{{ form.text.value }}</textarea>
+  <div class="form-group my-3">
+    <label for="{{ form.text.id_for_label }}" class="form-label fw-bold">Content</label>
+    <textarea rows="8" class="form-control" name="{{ form.text.name }}" \
+      id="{{ form.text.id_for_label }}"\
+      placeholder="You can use markdown syntax to format your text">{{ form.text.value }}</textarea>
   </div>
-  <div class="form-group">
-    <label for="post_category" class="form-label">Category:</label>
-      <select name="{{ form.category.name }}" id="{{ form.category.id_for_label }}">
+  <div class="form-group my-3">
+    <label for="post_category" class="form-label fw-bold">Category:</label>
+      <select name="{{ form.category.name }}" id="{{ form.category.id_for_label }}" class="form-select mb-3">
         <option value=""{% if not form.category.value %} selected{% endif %}>Select a category (required)</option>
         {% for category in form.category.field.choices.queryset %}
           <option value="{{ category.pk }}"{% if form.category.value == category.pk %} selected{% endif %}>{{ category.name }}</option>
         {% endfor %}
       </select>
     </div>
-  <div class="form-group">
-    <label for="{{ form.tags_new.id_for_label }}" class="form-label">Tags</label>
+  <div class="form-group my-3">
+    <label for="{{ form.tags_new.id_for_label }}" class="form-label fw-bold">Tags</label>
     <input type="text" id="{{ form.tags_new.id_for_label }}" name="{{ form.tags_new.name }}" \
           class="form-control" \
           placeholder="Enter tags separated by comma or space" \
