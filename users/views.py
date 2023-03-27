@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from stories.models import Story, Comment
 from django.contrib.auth.models import User
 
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, UserProfileForm
 from .models import UserProfile
 
 # Create your views here.
@@ -49,12 +49,14 @@ def profile(request, username):
     user_stories = Story.objects.filter(user=user).order_by('-created')
     user_comments = Comment.objects.filter(
         user=user).order_by('-created')
+    is_owner = user == request.user
 
     context = {
         'user': user,
         'user_profile': user_profile,
         'user_stories': user_stories,
         'user_comments': user_comments,
+        'is_owner': is_owner,
     }
     return render(request, 'users/profile.html', context)
 
@@ -79,4 +81,22 @@ def register(request):
     else:
         form = CustomUserCreationForm()
         print("I'm creating new")
-    return render(request, 'registration/registersty.html', {'form': form})
+    return render(request, 'registration/register.html', {'form': form})
+
+
+def update_profile(request):
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated.')
+            return redirect(reverse('users:profile', args=[request.user]))
+    else:
+        form = UserProfileForm(instance=user_profile)
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'users/update_profile.html', context)

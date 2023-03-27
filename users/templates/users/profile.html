@@ -22,7 +22,10 @@
   <div class="row justify-content-center align-items-center vh-100">
     <div class="col-md-10">
       <div class="card mt-0 shadow-lg">
-        <div class="card-body">
+        <div class="card-body position-relative">
+        {% if is_owner %}
+        <a href="{% url 'users:edit' %}" class="btn btn-outline-secondary position-absolute top-0 end-0 m-3">Edit Profile</a>
+        {% endif %}
           <div class="row" >
           <div class="col-md-6 mx-auto" id="pic">
             <img src="{% static 'images/sample.png' %}" alt="{{ user.username }}'s profile picture" class="img-fluid ">

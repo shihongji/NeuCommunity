@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% load static %}
+{% block content %}
+<h3 class="fw-bold mx-5 mt-4 text-black-50"></h3>
+<form method="post" class="form mx-5 my-3 d-grid gap-2">
+  {% csrf_token %}
+  {% bootstrap_form form layout="inline" %}
+  <button class="btn btn-primary" style="width:100px;" type="submit">Submit</button>
+</form>
+{% endblock %}
