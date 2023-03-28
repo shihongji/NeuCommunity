@@ -8,6 +8,9 @@ from django.contrib import messages
 from django.db.models import Count, Q
 from .models import Story, Comment, Vote
 from .forms import StoryForm, CommentForm
+from datetime import timedelta
+from django.utils import timezone
+from django.db.models.functions import Coalesce
 
 # Create your views here.
 
@@ -67,6 +70,15 @@ def index(request):
 def home(request):
     order_by = request.GET.get('order_by', '-votes')
     category_filter = request.GET.get('category', None)
+    time_filter = request.GET.get('time', 'today')
+
+    # Determine time threshold based on time filter
+    if time_filter == 'this_week':
+        time_threshold = timezone.now() - timedelta(days=7)
+    elif time_filter == 'this_month':
+        time_threshold = timezone.now() - timedelta(days=30)
+    else:
+        time_threshold = timezone.now() - timedelta(days=1)
 
     if order_by == 'votes':
         order_by = '-votes'
@@ -77,16 +89,33 @@ def home(request):
     else:
         order_by = '-votes'
 
+    # if category_filter:
+    #     stories_list = Story.objects.annotate(
+    #         num_upvotes=Count('vote', filter=Q(vote__vote_type=True))
+    #     ).filter(category__name__iexact=category_filter).order_by(order_by)
+    # else:
+    #     stories_list = Story.objects.annotate(
+    #         num_upvotes=Count('vote', filter=Q(vote__vote_type=True))
+    #     ).order_by(order_by)
     if category_filter:
-        stories_list = Story.objects.annotate(
-            num_upvotes=Count('vote', filter=Q(vote__vote_type=True))
-        ).filter(category__name__iexact=category_filter).order_by(order_by)
+        stories_list = Story.objects.filter(
+            category__name__iexact=category_filter
+        ).annotate(
+            num_upvotes=Coalesce(Count('votes'), 0)
+        ).filter(
+            vote__created__gte=time_threshold
+        ).order_by(
+            order_by
+        ).distinct()
     else:
         stories_list = Story.objects.annotate(
-            num_upvotes=Count('vote', filter=Q(vote__vote_type=True))
-        ).order_by(order_by)
+            num_upvotes=Coalesce(Count('votes'), 0)
+        ).filter(
+            Q(vote__created__gte=time_threshold) | Q(
+                vote__created__isnull=True)
+        ).order_by(order_by).distinct()
 
-    # Show 20 stories per page
+    # Show 30 stories per page
     paginator = Paginator(stories_list, 30)
 
     page = request.GET.get('page')
@@ -96,6 +125,7 @@ def home(request):
         'stories': stories,
         'order_by': order_by,
         'category_filter': category_filter,
+        'time_filter': time_filter,
     }
     return render(request, 'stories/home.html', context)
 
@@ -124,7 +154,7 @@ def story_detail(request, story_id):
     root_comments = story.comments.filter(
         parent_comment__isnull=True
     ).annotate(
-        num_upvotes=Count('vote', filter=Q(vote__vote_type=True))
+        num_upvotes=Count('vote')
     ).order_by('-num_upvotes', '-created')
     context = {
         'story': story,
@@ -163,10 +193,8 @@ def upvote_story(request, story_id):
     story = get_object_or_404(Story, id=story_id)
     vote = Vote.objects.filter(user=request.user, story=story).first()
     if not vote:
-        vote = Vote(user=request.user, story=story, vote_type=True)
+        vote = Vote(user=request.user, story=story)
         vote.save()
-        story.votes += 1
-        story.save()
         messages.success(request, "Upvote added.")
     else:
         messages.error(request, "You have already voted for this story.")
@@ -179,10 +207,8 @@ def upvote_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     vote = Vote.objects.filter(user=request.user, comment=comment).first()
     if not vote:
-        vote = Vote(user=request.user, comment=comment, vote_type=True)
+        vote = Vote(user=request.user, comment=comment)
         vote.save()
-        comment.votes += 1
-        comment.save()
         messages.success(request, "Upvote added.")
     else:
         messages.error(request, "You have already voted for this comment.")

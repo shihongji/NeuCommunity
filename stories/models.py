@@ -57,15 +57,14 @@ class Vote(models.Model):
     comment = models.ForeignKey(
         Comment, on_delete=CASCADE, null=True, blank=True)
     # True for upvote, False for downvote
-    vote_type = models.BooleanField(default=True)
+    # vote_type = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
         if self.comment:
-            self.comment.votes = Vote.objects.filter(comment=self.comment, vote_type=True).count(
-            ) - Vote.objects.filter(comment=self.comment, vote_type=False).count()
+            self.comment.votes += 1
             self.comment.save()
         elif self.story:
-            self.story.votes = Vote.objects.filter(story=self.story, vote_type=True).count(
-            ) - Vote.objects.filter(story=self.story, vote_type=False).count()
+            self.story.votes += 1
             self.story.save()
         super(Vote, self).save(*args, **kwargs)
