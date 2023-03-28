@@ -2,9 +2,34 @@
 {% block extra_head %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
+<script>
+  function submitTimeForm() {
+    document.getElementById("time_filter_form").submit();
+  }
+  function submitCategoryForm() {
+    document.getElementById("category_filter_form").submit();
+  }
+</script>
 {% endblock %}
 {% block content %}
 <div class="container cards">
+  <div class="d-flex justify-content-end" id="selector_con">
+    <form method="GET" id="category_filter_form" class="me-2">
+      <select class="form-select form-select-sm" id="category_selector" name="category" onchange="submitCategoryForm()">
+        <option value="">All Categories</option>
+        {% for category in categories %}
+          <option value="{{ category.name }}" {% if category_filter == category.name %}selected{% endif %}>{{ category.name }}</option>
+        {% endfor %}
+      </select>
+    </form>
+    <form method="GET" id="time_filter_form">
+      <select class="form-select form-select-sm" id="time_selector" name="time" onchange="submitTimeForm()">
+        <option value="today" {% if time_filter == 'today' %}selected{% endif %}>Today</option>
+        <option value="this_week" {% if time_filter == 'this_week' %}selected{% endif %}>This week</option>
+        <option value="this_month" {% if time_filter == 'this_month' %}selected{% endif %}>This month</option>
+      </select>
+    </form>
+  </div>
   {% for story in stories %}
     <div class="card border-1" >
       <div class="card-header d-flex">

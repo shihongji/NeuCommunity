@@ -77,3 +77,12 @@
 .page-link:hover {
   color: #B46060;
 }
+
+#selector_con {
+  padding-right: 16px;
+}
+
+option:hover {
+  background-color: #eee;
+  color: blue;
+}

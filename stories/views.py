@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.db.models import Count, Q
-from .models import Story, Comment, Vote
+from .models import Story, Comment, Vote, Category
 from .forms import StoryForm, CommentForm
 from datetime import timedelta
 from django.utils import timezone
@@ -71,6 +71,7 @@ def home(request):
     order_by = request.GET.get('order_by', '-votes')
     category_filter = request.GET.get('category', None)
     time_filter = request.GET.get('time', 'today')
+    category = Category.objects.all()
 
     # Determine time threshold based on time filter
     if time_filter == 'this_week':
@@ -89,21 +90,14 @@ def home(request):
     else:
         order_by = '-votes'
 
-    # if category_filter:
-    #     stories_list = Story.objects.annotate(
-    #         num_upvotes=Count('vote', filter=Q(vote__vote_type=True))
-    #     ).filter(category__name__iexact=category_filter).order_by(order_by)
-    # else:
-    #     stories_list = Story.objects.annotate(
-    #         num_upvotes=Count('vote', filter=Q(vote__vote_type=True))
-    #     ).order_by(order_by)
     if category_filter:
         stories_list = Story.objects.filter(
             category__name__iexact=category_filter
         ).annotate(
             num_upvotes=Coalesce(Count('votes'), 0)
         ).filter(
-            vote__created__gte=time_threshold
+            Q(vote__created__gte=time_threshold) | Q(
+                vote__created__isnull=True)
         ).order_by(
             order_by
         ).distinct()
@@ -126,6 +120,7 @@ def home(request):
         'order_by': order_by,
         'category_filter': category_filter,
         'time_filter': time_filter,
+        'categories': category,
     }
     return render(request, 'stories/home.html', context)
 
