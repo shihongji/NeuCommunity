@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'stories',
     'users',
     'bootstrap5',
-    'simplemde',
     'taggit',
 ]
 
@@ -132,15 +131,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Configure django-ckeditor
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': 'full',
-        'height': 500,
-        'width': '100%',
-    },
-}
-CKEDITOR_UPLOAD_PATH = 'uploads/ckeditor/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
