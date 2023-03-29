@@ -21,7 +21,8 @@ def search(request):
         stories = Story.objects.filter(
             Q(title__icontains=query) |
             Q(text__icontains=query) |
-            Q(tags__name__icontains=query)
+            Q(tags_new__name__icontains=query) |
+            Q(user__username__icontains=query)
         ).distinct()
         count = stories.count()
     else:
