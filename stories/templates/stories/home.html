@@ -16,7 +16,7 @@
   <div class="d-flex justify-content-end" id="selector_con">
     <form method="GET" id="category_filter_form" class="me-2">
       <select class="form-select form-select-sm" id="category_selector" name="category" onchange="submitCategoryForm()">
-        <option value="">All Categories</option>
+        <option value="">Categories</option>
         {% for category in categories %}
           <option value="{{ category.name }}" {% if category_filter == category.name %}selected{% endif %}>{{ category.name }}</option>
         {% endfor %}
@@ -24,7 +24,7 @@
     </form>
     <form method="GET" id="time_filter_form">
       <select class="form-select form-select-sm" id="time_selector" name="time" onchange="submitTimeForm()">
-        <option value="today" {% if time_filter == 'today' %}selected{% endif %}>Today</option>
+        <option id="op" value="today" {% if time_filter == 'today' %}selected{% endif %}>Today</option>
         <option value="this_week" {% if time_filter == 'this_week' %}selected{% endif %}>This week</option>
         <option value="this_month" {% if time_filter == 'this_month' %}selected{% endif %}>This month</option>
       </select>
@@ -40,7 +40,12 @@
       </div>
         <div class="card-footer">
           <span class="card-data bg-transparent text-muted small lh-1">
-            {{ story.votes }} points | {{ story.created|timesince }} ago | <mark>{{ story.tags_new.all|join:", " }}</mark> | {{ story.user.username }} | Comments ({{ story.num_comments }})
+            {{ story.votes }} points | {{ story.created|timesince }} ago | 
+            <mark>{{ story.tags_new.all|join:", " }}</mark> | 
+           <a class="link-muted" href="{% url 'users:profile' story.user.username %}">{{ story.user.username }}</a> | 
+           <a href="{% url 'stories:story_detail' story.id %}#comments" class="link-muted">
+          Comments ({{ story.num_comments }})</a>
+           
           </span>
         </div>
       </div>
@@ -94,5 +99,4 @@
 {% endblock %}
 
 {% block footer %}
-  <p>Footer information, such as links to About, Contact, and Help pages, etc.</p>
 {% endblock %}

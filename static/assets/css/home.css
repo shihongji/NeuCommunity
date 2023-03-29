@@ -82,7 +82,7 @@
   padding-right: 16px;
 }
 
-option:hover {
-  background-color: #eee;
-  color: blue;
+.link-muted {
+  color: inherit;
+  text-decoration: none;
 }
