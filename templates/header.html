@@ -1,5 +1,9 @@
 <header>
   {% load static %}
+<!--Add icons and fonts-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<script src="https://kit.fontawesome.com/b102c16ea9.js" crossorigin="anonymous"></script>
+<!-- icons and fonts above-->
   <nav class="nav bg-info h6">
     <li class="nav-item">
       <a class="nav-link link-light" href="{% url 'stories:home' %}"><img src="{% static 'images/LOGO_48.png' %}"
@@ -20,7 +24,7 @@
     <!-- Search Bar --->
       <form action="{% url 'stories:search' %}" method="get" class="mx-auto d-flex">
         <input class="form-control me-2" type="text" name="q" placeholder="Search" value="{{ request.GET.q }}">
-        <button class="btn btn-outline-light" type="submit">Search</button>
+        <button class="btn btn-outline-light" type="submit"><i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i></button>
       </form>
       <!-- User name and Login/Logout -->
       <ul class="nav ms-auto">
