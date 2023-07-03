@@ -7,7 +7,8 @@ django.setup()
 from django.core.wsgi import get_wsgi_application
 from faker import Faker
 from django.contrib.auth.models import User
-from stories.models import Story, Category, Tag, Comment, Vote
+from stories.models import Story, Category, Comment, Vote
+from taggit.managers import TaggableManager
 
 
 application = get_wsgi_application()
@@ -16,24 +17,24 @@ application = get_wsgi_application()
 fake = Faker()
 
 # You can customize the categories and tags as needed
-categories = ['Ask', 'Jobs', 'Trading', 'Housing', 'Dining', 'Transportation']
+categories = ['Ask', 'Jobs', 'News', 'Learn', 'Misllaneous', 'Trading', 'Housing', 'Dining', 'Transportation']
 tags = ['Python', 'React', 'JavaScript', 'ML', 'AI', 'Silicon Valley', 'Seattle', 'Boston',
-        'San Francisco', 'INFO5100', 'ENCP6000', 'INFO6105', 'Hackerthon', 'Algorithm', 'Java']
+        'San Francisco', 'INFO5100', 'ENCP6000', 'INFO6105', 'Hackathon', 'Algorithm', 'Java']
 
 # Creating categories
 for category_name in categories:
     Category.objects.get_or_create(name=category_name)
 
 # Creating tags
-for tag_name in tags:
-    Tag.objects.get_or_create(name=tag_name)
+# for tag_name in tags:
+#     Tag.objects.get_or_create(name=tag_name)
 
 # Generating 200 random stories
 for _ in range(200):
     random_user = random.choice(User.objects.all())
     random_category = random.choice(Category.objects.all())
-    random_tags = random.sample(
-        list(Tag.objects.all()), k=random.randint(1, len(tags)))
+    # random_tags = random.sample(
+    #     list(Tag.objects.all()), k=random.randint(1, len(tags)))
 
     has_url = random.choice([True, False])
     story = Story.objects.create(
@@ -44,7 +45,7 @@ for _ in range(200):
         text=fake.text() if not has_url else None,
     )
 
-    story.tags.set(random_tags)
+    story.tags_new.set(random.sample(tags, random.randint(1, len(tags)-5)))
     story.save()
 
     # Generating random comments for the story
@@ -62,7 +63,7 @@ for _ in range(200):
             Vote.objects.create(
                 user=vote_user,
                 comment=comment,
-                vote_type=random.choice([True, False]),
+                # vote_type=random.choice([True, False]),
             )
 
     # Generating random votes for the story
@@ -71,7 +72,7 @@ for _ in range(200):
         Vote.objects.create(
             user=vote_user,
             story=story,
-            vote_type=random.choice([True, False]),
+            # vote_type=random.choice([True, False]),
         )
 
 print("200 random stories created with comments and votes!")
