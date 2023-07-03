@@ -11,7 +11,7 @@ Here is the presentation deck that introduce the product in detail.
 3. Install the packages in `requirements.txt`,
 
     `pip3 install -r requirements.txt`
-4. `python3 mange.py migrate`
+4. `python3 manage.py migrate`
 Then you could runserver.
 
 
