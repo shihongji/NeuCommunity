@@ -1,4 +1,5 @@
 # NeuCommunity - NEU Hackers
+## Introduction
 A project for builder's dojo. The product is a community that let users ask and share solutions.
 
 Here is the presentation deck that introduces the product in detail. 

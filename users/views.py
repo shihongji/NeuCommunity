@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
+
 # from django.contrib.auth.forms import UserCreationForm
 from django.urls import is_valid_path, reverse
 from django.http import HttpResponse, HttpResponseRedirect
@@ -15,54 +16,53 @@ from .models import UserProfile
 
 
 def custom_login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
             messages.success(request, "You have successfully logged in.")
-            next_url = request.GET.get('next', None)
+            next_url = request.GET.get("next", None)
             if next_url:
                 return redirect(next_url)
             else:
-                return redirect(reverse('stories:home'))
+                return redirect(reverse("stories:home"))
 
         else:
             messages.error(request, "Invalid username or password.")
-            return render(request, 'users/login.html')
+            return render(request, "users/login.html")
 
     else:
-        return render(request, 'users/login.html')
+        return render(request, "users/login.html")
 
 
 def custom_logout(request):
     logout(request)
-    return HttpResponseRedirect(reverse('stories:home'))
+    return HttpResponseRedirect(reverse("stories:home"))
 
 
 @login_required
 def profile(request, username):
     user = get_object_or_404(User, username=username)
     user_profile = user.userprofile
-    user_stories = Story.objects.filter(user=user).order_by('-created')
-    user_comments = Comment.objects.filter(
-        user=user).order_by('-created')
+    user_stories = Story.objects.filter(user=user).order_by("-created")
+    user_comments = Comment.objects.filter(user=user).order_by("-created")
     is_owner = user == request.user
 
     context = {
-        'user': user,
-        'user_profile': user_profile,
-        'user_stories': user_stories,
-        'user_comments': user_comments,
-        'is_owner': is_owner,
+        "user": user,
+        "user_profile": user_profile,
+        "user_stories": user_stories,
+        "user_comments": user_comments,
+        "is_owner": is_owner,
     }
-    return render(request, 'users/profile.html', context)
+    return render(request, "users/profile.html", context)
 
 
 def register(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         print("I'm POSTing")
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -74,29 +74,31 @@ def register(request):
             # profile = UserProfile(user=user)
             # profile.save()
             login(request, user)
-            return redirect('stories:home')
+            return redirect("stories:home")
         else:
             messages.error(
-                request, 'There was an error with your registration. Please correct the errors below.')
+                request,
+                "There was an error with your registration. Please correct the errors below.",
+            )
     else:
         form = CustomUserCreationForm()
         print("I'm creating new")
-    return render(request, 'registration/register.html', {'form': form})
+    return render(request, "registration/register.html", {"form": form})
 
 
 def update_profile(request):
     user_profile = get_object_or_404(UserProfile, user=request.user)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = UserProfileForm(request.POST, instance=user_profile)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Your profile has been updated.')
-            return redirect(reverse('users:profile', args=[request.user]))
+            messages.success(request, "Your profile has been updated.")
+            return redirect(reverse("users:profile", args=[request.user]))
     else:
         form = UserProfileForm(instance=user_profile)
 
     context = {
-        'form': form,
+        "form": form,
     }
-    return render(request, 'users/update_profile.html', context)
+    return render(request, "users/update_profile.html", context)
