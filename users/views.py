@@ -18,8 +18,8 @@ def custom_login(request: HttpRequest) -> Union[HttpResponse, HttpResponseRedire
     Handles authentication and redirects user based on login status.
     """
     if request.method == "POST":
-        username: str = request.POST.get["username", ""]
-        password: str = request.POST.get["password", ""]
+        username: str = request.POST.get("username", "")
+        password: str = request.POST.get("password", "")
         user = authenticate(request, username=username, password=password)
 
         if user:
